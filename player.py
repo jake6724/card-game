@@ -50,28 +50,28 @@ class Player:
     def pretty_print_hand(self):
         # Create shorter var names for card info so it can be formatted. 
         c1n = self.hand.card_list[0].name
-        c1pc = self.hand.card_list[0].placement_cost
+        c1pc = self.hand.card_list[0].mana
         c1hp = self.hand.card_list[0].health
         c1desc1 = "Card info here"
         c1desc2 = "on multiple lines"
 
         c2n = self.hand.card_list[1].name
-        c2pc = self.hand.card_list[1].placement_cost
+        c2pc = self.hand.card_list[1].mana
         c2hp = self.hand.card_list[1].health
         c2desc1 = "Card info here"
         c2desc2 = "on multiple lines"
 
         c3n = self.hand.card_list[2].name
-        c3pc = self.hand.card_list[2].placement_cost
+        c3pc = self.hand.card_list[2].mana
         c3hp = self.hand.card_list[2].health
         c3desc1 = "Card info here"
         c3desc2 = "on multiple lines"
 
         c4n = self.hand.card_list[3].name
-        c4pc = self.hand.card_list[3].placement_cost
+        c4pc = self.hand.card_list[3].mana
         c4hp = self.hand.card_list[3].health
         c4desc1 = "Card info here"
-        c4desc2 = "on multiple lines"
+        c4desc2 = self.hand.card_list[3].desc
 
         print(textwrap.dedent(f"""   
             {self.name}'s hand:                   
@@ -83,7 +83,7 @@ class Player:
             |                     |   |                     |   |                     |   |                     |
             |                     |   |                     |   |                     |   |                     |
             |{c1desc1:^21}|   |{c2desc1:^21}|   |{c3desc1:^21}|   |{c4desc1:^21}|
-            |{c1desc2:^21}|   |{c2desc2:^21}|   |{c3desc2:^21}|   |{c4desc2:^21}|
+            |{c1desc2:^21}|   |{c2desc2:^21}|   |{c3desc2:^21}|   |{c4desc2}|
             |                     |   |                     |   |                     |   |                     |
             +---------------------+   +---------------------+   +---------------------+   +---------------------+
             """))

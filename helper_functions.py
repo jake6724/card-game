@@ -12,15 +12,16 @@ def shuffle_card_list(card_list):
 
 
 def create_new_card(card_data_list):
-    new_card = Card(card_data_list[0],card_data_list[1],card_data_list[2],card_data_list[3],
-                        card_data_list[4],card_data_list[5],card_data_list[6],card_data_list[7],
-                        card_data_list[8],card_data_list[9],card_data_list[10])    
+    new_card = Card(card_data_list[0], card_data_list[1], card_data_list[2], card_data_list[3], card_data_list[4], card_data_list[5], 
+                    card_data_list[6], card_data_list[7], card_data_list[8], card_data_list[9], card_data_list[10], card_data_list[11], 
+                    card_data_list[12])    
     return new_card
 
 def duplicate_cards(card_list):
+    # Create card descriptions here also 
     duplicated_cards = [] 
     for card in card_list:
-        if int(card.placement_cost) <= 3: 
+        if int(card.mana) <= 3: 
             card_copy = copy.deepcopy(card)
             duplicated_cards.append(card_copy)
     return duplicated_cards

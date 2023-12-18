@@ -34,7 +34,11 @@ class Game_engine:
         card_data = open(self.card_data_file, "r")
         for line in card_data:
             line_data_list = line.split() 
+            print(line_data_list)
             new_card = create_new_card(line_data_list)
+            # Create card descriptions here also
+            new_card.create_description()
+            print(str(new_card.desc))
             temp_card_list.append(new_card)
 
         # Duplicate all cards with value <= self.max_placement_cost_to_duplicate
