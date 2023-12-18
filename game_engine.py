@@ -95,4 +95,5 @@ class Game_engine:
 
     def pretty_print_hands(self):
         self.player1.pretty_print_hand()
+        self.player2.pretty_print_hand()
     

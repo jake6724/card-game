@@ -61,16 +61,29 @@ class Player:
         c2desc1 = "Card info here"
         c2desc2 = "on multiple lines"
 
-        print(textwrap.dedent(f"""                      
-            +---------------------+        +---------------------+
-            |{c1n:^21}|        |{c2n:^21}|                                                  
-            |                     |        |                     |
-            |PC:{c1pc:<18}|        |PC:{c2pc:<18}|
-            |HP:{c1hp:<18}|        |HP:{c2hp:<18}|
-            |                     |        |                     |
-            |                     |        |                     |
-            |{c1desc1:^21}|        |{c2desc1:^21}|
-            |{c1desc2:^21}|        |{c2desc2:^21}|
-            |                     |        |                     |
-            +---------------------+        +---------------------+ 
+        c3n = self.hand.card_list[2].name
+        c3pc = self.hand.card_list[2].placement_cost
+        c3hp = self.hand.card_list[2].health
+        c3desc1 = "Card info here"
+        c3desc2 = "on multiple lines"
+
+        c4n = self.hand.card_list[3].name
+        c4pc = self.hand.card_list[3].placement_cost
+        c4hp = self.hand.card_list[3].health
+        c4desc1 = "Card info here"
+        c4desc2 = "on multiple lines"
+
+        print(textwrap.dedent(f"""   
+            {self.name}'s hand:                   
+            +---------------------+   +---------------------+   +---------------------+   +---------------------+
+            |{c1n:^21}|   |{c2n:^21}|   |{c3n:^21}|   |{c4n:^21}|                                     
+            |                     |   |                     |   |                     |   |                     |
+            |PC:{c1pc:<18}|   |PC:{c2pc:<18}|   |PC:{c3pc:<18}|   |PC:{c4pc:<18}|
+            |HP:{c1hp:<18}|   |HP:{c2hp:<18}|   |HP:{c3hp:<18}|   |HP:{c4hp:<18}|
+            |                     |   |                     |   |                     |   |                     |
+            |                     |   |                     |   |                     |   |                     |
+            |{c1desc1:^21}|   |{c2desc1:^21}|   |{c3desc1:^21}|   |{c4desc1:^21}|
+            |{c1desc2:^21}|   |{c2desc2:^21}|   |{c3desc2:^21}|   |{c4desc2:^21}|
+            |                     |   |                     |   |                     |   |                     |
+            +---------------------+   +---------------------+   +---------------------+   +---------------------+
             """))
