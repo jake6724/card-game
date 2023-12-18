@@ -1,7 +1,7 @@
 from card import Card 
 
 class Deck: 
-    # Deck starts empty. Cards are added in gen_deck func in game_engine 
+    # Deck starts with no card list, a complete one is given to it by game_engine -> gen_player_decks 
     def __init__(self):
         pass 
 
