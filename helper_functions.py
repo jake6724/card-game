@@ -17,8 +17,7 @@ def create_new_card(card_data_list):
                     card_data_list[12])    
     return new_card
 
-def duplicate_cards(card_list):
-    # Create card descriptions here also 
+def duplicate_cards(card_list): 
     duplicated_cards = [] 
     for card in card_list:
         if int(card.mana) <= 3: 
