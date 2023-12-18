@@ -1,6 +1,7 @@
 from card import Card
 from deck import Deck 
 from player import Player
+from gameboard import GameBoard
 from hand import Hand
 import copy
 from helper_functions import shuffle_card_list, create_new_card, duplicate_cards, append_card_list
@@ -15,11 +16,13 @@ class Game_engine:
         self.player1 = self.player_list[0]
         self.player2 = self.player_list[1]
         self.hand_size = 4
+        #self.gb = gb (down below)
         self.max_placement_cost_to_duplicate = 3
 
     def run_setup(self):
         self.assign_player_decks()
         self.assign_player_starting_hands()
+        self.gen_gameboard_assign__player_lanes()
 
     def gen_player_decks(self):
         print("Generating decks")
@@ -71,6 +74,14 @@ class Game_engine:
             self.player2.draw_card()
         print("Starting hands drawn")
 
+    def gen_gameboard_assign__player_lanes(self):
+        gb = GameBoard()
+        self.gb = gb
+
+        self.player1.add_lane_list(gb.lane_list[0:4])
+        self.player2.add_lane_list(gb.lane_list[4:8])
+
+
     def print_player_decks(self):
         self.player1.print_deck()
         self.player2.print_deck()
@@ -78,3 +89,7 @@ class Game_engine:
     def print_player_hands(self):
         self.player1.print_hand()
         self.player2.print_hand()
+
+    def print_player_lanes(self):
+        self.player1.print_lane_list()
+        self.player2.print_lane_list()
