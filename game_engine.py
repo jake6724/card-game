@@ -81,7 +81,6 @@ class Game_engine:
         self.player1.add_lane_list(gb.lane_list[0:4])
         self.player2.add_lane_list(gb.lane_list[4:8])
 
-
     def print_player_decks(self):
         self.player1.print_deck()
         self.player2.print_deck()
@@ -93,3 +92,7 @@ class Game_engine:
     def print_player_lanes(self):
         self.player1.print_lane_list()
         self.player2.print_lane_list()
+
+    def pretty_print_hands(self):
+        self.player1.pretty_print_hand()
+    

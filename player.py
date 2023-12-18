@@ -1,3 +1,5 @@
+import textwrap
+
 class Player: 
     def __init__(self, name: str): 
         self.name = name 
@@ -44,3 +46,31 @@ class Player:
         print(f"{self.name}'s hand:")
         for card in self.hand.card_list:
             print(card)
+
+    def pretty_print_hand(self):
+        # Create shorter var names for card info so it can be formatted. 
+        c1n = self.hand.card_list[0].name
+        c1pc = self.hand.card_list[0].placement_cost
+        c1hp = self.hand.card_list[0].health
+        c1desc1 = "Card info here"
+        c1desc2 = "on multiple lines"
+
+        c2n = self.hand.card_list[1].name
+        c2pc = self.hand.card_list[1].placement_cost
+        c2hp = self.hand.card_list[1].health
+        c2desc1 = "Card info here"
+        c2desc2 = "on multiple lines"
+
+        print(textwrap.dedent(f"""                      
+            +---------------------+        +---------------------+
+            |{c1n:^21}|        |{c2n:^21}|                                                  
+            |                     |        |                     |
+            |PC:{c1pc:<18}|        |PC:{c2pc:<18}|
+            |HP:{c1hp:<18}|        |HP:{c2hp:<18}|
+            |                     |        |                     |
+            |                     |        |                     |
+            |{c1desc1:^21}|        |{c2desc1:^21}|
+            |{c1desc2:^21}|        |{c2desc2:^21}|
+            |                     |        |                     |
+            +---------------------+        +---------------------+ 
+            """))

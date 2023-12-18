@@ -6,6 +6,8 @@ G = Game_engine("card_data2.txt")
 
 
 G.run_setup()
-G.print_player_decks()
-G.print_player_hands()
-G.print_player_lanes()
+# G.print_player_decks()
+# G.print_player_hands()
+# G.print_player_lanes()
+G.pretty_print_hands()
+
