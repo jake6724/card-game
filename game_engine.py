@@ -22,6 +22,9 @@ class Game_engine:
         self.max_placement_cost_to_duplicate = 3
         self.current_player = self.player1
         self.round = 0 
+        self.mana_per_turn = 1
+        self.round_interval_to_increase_mana = 10
+        self.winner = None
 
     def run_setup(self):
         self.assign_player_decks()
@@ -29,16 +32,20 @@ class Game_engine:
         self.gen_gameboard_assign__player_lanes()
 
     def run_game_loop(self):
-        # while no one has won:
+        # while self.winner == None: 
         self.round += 1 
-        print(f"Round number:{self.round}")
-
-        self.display_current_player_hand()
         
+        self.deal_mana()
 
+        # Run display functions
+        self.display_round_info()
+        self.gb.display_gameboard()
+        self.display_current_player_hand()
+
+        # Run placement phase 
+        self.placement_phase()
 
     def gen_player_decks(self):
-        print("Generating decks")
         player1_deck = Deck() 
         player2_deck = Deck() 
         temp_card_list = []
@@ -66,19 +73,15 @@ class Game_engine:
         player1_deck.add_card_list(temp_card_list)
         player2_deck.add_card_list(copy.deepcopy(temp_card_list))
 
-        print("Decks generated")
         return [player1_deck, player2_deck]
 
     def assign_player_decks(self):    
-        print("Assigning player decks")
         deck_list = self.gen_player_decks() 
 
         self.player1.add_deck(deck_list[0])
         self.player2.add_deck(deck_list[1])
-        print("Player decks assigned")
-
+ 
     def assign_player_starting_hands(self): # Take top 3 cards off the top assign to player hands 
-        print("Drawing starting hands")
         player1_hand = Hand()
         player2_hand = Hand()
 
@@ -88,7 +91,6 @@ class Game_engine:
         for i in range(self.hand_size): 
             self.player1.draw_card()
             self.player2.draw_card()
-        print("Starting hands drawn")
 
     def gen_gameboard_assign__player_lanes(self):
         empty_lane_card = Card("empty",0,0,0,0,"c",0,0,"c",0,0,"l",0)
@@ -96,8 +98,25 @@ class Game_engine:
         gb = GameBoard(empty_lane_card)
         self.gb = gb
 
-        self.player1.add_lane_list(gb.lane_list[0:4])
-        self.player2.add_lane_list(gb.lane_list[4:8])
+        self.player1.add_lane_list(gb.lane_list[0::2])
+        self.player2.add_lane_list(gb.lane_list[1::2])
+
+        # self.print_player_lanes()
+
+    def deal_mana(self):
+        self.determine_mana_amount()
+        self.player1.add_mana(self.mana_per_turn)
+        self.player2.add_mana(self.mana_per_turn)
+
+    def placement_phase(self):
+        # input validation handled by Player / Hand classes
+        card_to_place = self.current_player.get_card_by_name()
+        lane_number = self.current_player.get_valid_lane_number()       
+
+        self.gb.add_card_to_lane(card_to_place, lane_number)
+        
+        self.gb.display_gameboard()
+
 
     def print_player_decks(self):
         self.player1.print_deck()
@@ -117,6 +136,22 @@ class Game_engine:
     
     def display_current_player_hand(self):
         self.current_player.pretty_print_hand()
+
+    def display_current_player_lanes(self):
+        self.current_player.print_lane_list()
+
+    def display_round_info(self):
+        # Display round, player health and mana, current mana dealt per turn 
+        print(f"{self.player1.name} - HP: {self.player1.health} MP: {self.player1.mana}")
+        print(f"{self.player2.name} - HP: {self.player2.health} MP: {self.player2.mana} ")
+        print(f"Current mana per turn:{self.mana_per_turn}")
+        print()
+        print(f"{self.current_player.name}'s TURN")
+
+    def determine_mana_amount(self):
+        # Check round number and determine how much mana should be dealt each round currently
+        if self.round % self.round_interval_to_increase_mana == 0:
+            self.mana_per_turn += 1 
 
     def clear_terminal(self):
         os.system('cls' if os.name == 'nt' else 'clear')

@@ -13,6 +13,9 @@ class Player:
     def add_deck(self, new_deck):
         self.deck = new_deck
 
+    def add_mana(self, mana_amount):
+        self.mana += mana_amount
+
     def print_deck(self):
         self.deck.print_card_list()
 
@@ -25,6 +28,23 @@ class Player:
     def draw_card(self):
         self.hand.add_card_to_hand(self.deck.get_top_card())
 
+    def get_card_by_name(self):
+        # Input validation handled in Hand class
+        return self.hand.get_card_by_name()
+        
+    def get_valid_lane_number(self):
+        is_lane_valid = False 
+        # Check that lane is valid for current player 
+        while is_lane_valid == False:
+            lane_to_place_card = input(f"Select Lane (Your lanes: {self.get_lane_list_string()}): ")
+            for lane in self.lane_list:
+                if str(lane.number) == lane_to_place_card:
+                    lane_number = int(lane.number)
+                    is_lane_valid = True 
+            if is_lane_valid == False:
+                print("Lane invalid!") 
+        return lane_number
+
     def add_lane_list(self, new_lane_list):
         self.lane_list = new_lane_list
         self.lane1 = self.lane_list[0]
@@ -32,10 +52,18 @@ class Player:
         self.lane3 = self.lane_list[2]
         self.lane4 = self.lane_list[3]
 
+    def get_lane_list_string(self):
+        lane_string = ""
+        for lane in self.lane_list:
+            lane_string += f"{lane.number} "
+        return lane_string
+    
     def print_lane_list(self):
         print(f"{self.name}'s Lanes:")
+        lane_string = ""
         for lane in self.lane_list:
-            print(lane)
+            lane_string += f"{lane.number} "
+        print(lane_string)
 
     def print_deck(self):
         print(f"{self.name}'s Deck:")

@@ -19,6 +19,11 @@ class GameBoard:
         self.lane7 = self.lane_list[6]
         self.lane8 = self.lane_list[7]
 
+    def add_card_to_lane(self, new_card: Card, lane_number: int):
+        for lane in self.lane_list:
+            if lane.number == lane_number:
+                lane.set_active_card(new_card)
+
     def display_gameboard(self): 
         print(f"""   
                 Gameboard:
