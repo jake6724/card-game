@@ -1,5 +1,5 @@
-from lane import Lane
-from card import Card 
+from game_classes.lane import Lane
+from game_classes.card import Card 
 import textwrap
 
 

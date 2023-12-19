@@ -1,4 +1,4 @@
-from card import Card 
+from game_classes.card import Card 
 
 class Deck: 
     # Deck starts with no card list, a complete one is given to it by game_engine -> gen_player_decks 

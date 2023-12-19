@@ -1,4 +1,4 @@
-from card import Card
+from game_classes.card import Card
 
 class Lane:
     def __init__(self, lane_number: int, starting_card: Card):

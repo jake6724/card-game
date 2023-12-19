@@ -1,8 +1,8 @@
-from card import Card
-from deck import Deck 
-from player import Player
-from gameboard import GameBoard
-from hand import Hand
+from game_classes.card import Card
+from game_classes.deck import Deck 
+from game_classes.player import Player
+from game_classes.gameboard import GameBoard
+from game_classes.hand import Hand
 import copy
 import os
 import time 

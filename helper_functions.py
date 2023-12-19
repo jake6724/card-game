@@ -1,6 +1,6 @@
 import random
 import copy
-from card import Card 
+from game_classes.card import Card 
 
 
 def shuffle_card_list(card_list): 
