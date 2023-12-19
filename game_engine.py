@@ -8,8 +8,6 @@ import os
 import time 
 from helper_functions import shuffle_card_list, create_new_card, duplicate_cards, append_card_list
 
-# TODO: Maybe make a CardList class ? or use deck for the gen deck stuff 
-
 class Game_engine: 
     def __init__(self, card_data_file):
         self.deck = []
@@ -82,7 +80,7 @@ class Game_engine:
         self.player1.add_deck(deck_list[0])
         self.player2.add_deck(deck_list[1])
  
-    def assign_player_starting_hands(self): # Take top 3 cards off the top assign to player hands 
+    def assign_player_starting_hands(self): 
         player1_hand = Hand()
         player2_hand = Hand()
 
@@ -108,14 +106,23 @@ class Game_engine:
         self.player2.add_mana(self.mana_per_turn)
 
     def placement_phase(self):
+        player1_placement_data_list = []
+
+        player2_card_list_to_place = []
+        player2_lane_number_list = [] 
+
         # input validation handled by Player / Hand classes
-        card_to_place = self.current_player.get_card_by_name()
-        lane_number = self.current_player.get_valid_lane_number()       
+        option = input("(s)elect card or (e)nd turn:")
+        print(f"SELECTED: {option}")
+        while option != "e": 
+            player1_placement_data_pair = self.player1.get_card_placement_data()
+            player1_placement_data_list.append(player1_placement_data_pair)
+            option = input("(s)elect card or (e)nd turn:")
 
 
         # TODO: Don't call this until each player has gone ! and call it for both
-        self.gb.add_card_to_lane(card_to_place, lane_number)
-        self.gb.display_gameboard()
+        # self.gb.add_card_to_lane(card_to_place, lane_number)
+        # self.gb.display_gameboard()
 
     def print_player_decks(self):
         self.player1.print_deck()

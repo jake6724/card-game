@@ -13,19 +13,20 @@ class Hand():
             self.card4 = self.card_list[3]
 
     def get_card_by_name(self):
-        is_card_in_hand = False
+        # is_card_in_hand = False
 
         # Check that card exists in hand 
-        while is_card_in_hand == False:
-            card_to_place_name = str(input("Select Card: "))
-            for card in self.card_list:
-                if card.name == card_to_place_name:
-                    is_card_in_hand = True 
-                    found_card = card
-            if is_card_in_hand == False:
-                print("Card not in hand!")
-        
-        return found_card
+        # while is_card_in_hand == False:
+        card_to_place_name = str(input("Select Card: "))
+        for card in self.card_list:
+            if card.name == card_to_place_name:
+                is_card_in_hand = True 
+                found_card = card
+        if is_card_in_hand:
+            return found_card
+        else:
+            print("Card not in hand!")
+            return None 
 
     def print_card_list(self):
         for card in self.card_list:
