@@ -1,5 +1,5 @@
 class Card: 
-    def __init__(self, name: str, mana: int, health: int, start_turn: int, end_turn, card_target: int, card_damage: int, player_damage: int, finale_card_target: str, finale_card_damage: int, finale_player_damage: int, swap_direction: str, swap_duration: int): 
+    def __init__(self, name: str, mana: int, health: int, start_turn: int, end_turn, card_target: str, card_damage: int, player_damage: int, finale_card_target: str, finale_card_damage: int, finale_player_damage: int, swap_direction: str, swap_duration: int): 
         self.name = name 
         self.mana = mana 
         self.health = health
@@ -13,9 +13,6 @@ class Card:
         self.finale_player_damage = int(finale_player_damage)
         self.swap_direction = swap_direction
         self.swap_duration = int(swap_duration)
-
-    # def print_desc(self):
-    #     print(f"Card Description:{self.desc}")
 
     def create_description(self):
         # Set up desc text vars 

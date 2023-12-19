@@ -4,6 +4,8 @@ from player import Player
 from gameboard import GameBoard
 from hand import Hand
 import copy
+import os
+import time 
 from helper_functions import shuffle_card_list, create_new_card, duplicate_cards, append_card_list
 
 # TODO: Maybe make a CardList class ? or use deck for the gen deck stuff 
@@ -12,17 +14,28 @@ class Game_engine:
     def __init__(self, card_data_file):
         self.deck = []
         self.card_data_file = card_data_file
-        self.player_list = [Player("player1"), Player("player2")]
+        self.player_list = [Player("PLAYER 1"), Player("PLAYER 2")]
         self.player1 = self.player_list[0]
         self.player2 = self.player_list[1]
         self.hand_size = 4
         #self.gb = gb (down below)
         self.max_placement_cost_to_duplicate = 3
+        self.current_player = self.player1
+        self.round = 0 
 
     def run_setup(self):
         self.assign_player_decks()
         self.assign_player_starting_hands()
         self.gen_gameboard_assign__player_lanes()
+
+    def run_game_loop(self):
+        # while no one has won:
+        self.round += 1 
+        print(f"Round number:{self.round}")
+
+        self.display_current_player_hand()
+        
+
 
     def gen_player_decks(self):
         print("Generating decks")
@@ -78,7 +91,9 @@ class Game_engine:
         print("Starting hands drawn")
 
     def gen_gameboard_assign__player_lanes(self):
-        gb = GameBoard()
+        empty_lane_card = Card("empty",0,0,0,0,"c",0,0,"c",0,0,"l",0)
+
+        gb = GameBoard(empty_lane_card)
         self.gb = gb
 
         self.player1.add_lane_list(gb.lane_list[0:4])
@@ -100,3 +115,11 @@ class Game_engine:
         self.player1.pretty_print_hand()
         self.player2.pretty_print_hand()
     
+    def display_current_player_hand(self):
+        self.current_player.pretty_print_hand()
+
+    def clear_terminal(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
+
+    def sleep_terminal(self, time_to_sleep):
+        time.sleep(time_to_sleep)
