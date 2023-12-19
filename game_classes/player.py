@@ -81,8 +81,8 @@ class Player:
                 X===================================X   X===================================X   X===================================X   X===================================X
                 |{self.hand.card1.name:^35}|   |{self.hand.card2.name:^35}|   |{self.hand.card3.name:^35}|   |{self.hand.card4.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    
-                |MP:{self.hand.card1.mana:<32}|   |MP:{self.hand.card2.mana:<32}|   |MP:{self.hand.card3.mana:<32}|   |MP:{self.hand.card4.mana:<32}|
-                |HP:{self.hand.card1.health:<32}|   |HP:{self.hand.card2.health:<32}|   |HP:{self.hand.card3.health:<32}|   |HP:{self.hand.card4.health:<32}|         
+                |MP:{self.hand.card1.desc_mana:<32}|   |MP:{self.hand.card2.desc_mana:<32}|   |MP:{self.hand.card3.desc_mana:<32}|   |MP:{self.hand.card4.desc_mana:<32}|
+                |HP:{self.hand.card1.desc_health:<32}|   |HP:{self.hand.card2.desc_health:<32}|   |HP:{self.hand.card3.desc_health:<32}|   |HP:{self.hand.card4.desc_health:<32}|         
                 |                                   |   |                                   |   |                                   |   |                                   |         
                 |{self.hand.card1.desc_each:^35}|   |{self.hand.card2.desc_each:^35}|   |{self.hand.card3.desc_each:^35}|   |{self.hand.card4.desc_each:^35}|         
                 |{self.hand.card1.desc_card_damage:^35}|   |{self.hand.card2.desc_card_damage:^35}|   |{self.hand.card3.desc_card_damage:^35}|   |{self.hand.card4.desc_card_damage:^35}|         

@@ -24,6 +24,7 @@ class Game_engine:
         self.round = 0 
         self.mana_per_turn = 1
         self.round_interval_to_increase_mana = 10
+        self.max_mana_per_turn = 6
         self.winner = None
 
     def run_setup(self):
@@ -93,9 +94,7 @@ class Game_engine:
             self.player2.draw_card()
 
     def gen_gameboard_assign__player_lanes(self):
-        empty_lane_card = Card("empty",0,0,0,0,"c",0,0,"c",0,0,"l",0)
-
-        gb = GameBoard(empty_lane_card)
+        gb = GameBoard()
         self.gb = gb
 
         self.player1.add_lane_list(gb.lane_list[0::2])
@@ -117,7 +116,6 @@ class Game_engine:
         # TODO: Don't call this until each player has gone ! and call it for both
         self.gb.add_card_to_lane(card_to_place, lane_number)
         self.gb.display_gameboard()
-
 
     def print_player_decks(self):
         self.player1.print_deck()
@@ -152,7 +150,8 @@ class Game_engine:
     def determine_mana_amount(self):
         # Check round number and determine how much mana should be dealt each round currently
         if self.round % self.round_interval_to_increase_mana == 0:
-            self.mana_per_turn += 1 
+            if self.mana_per_turn <= self.max_mana_per_turn: 
+                self.mana_per_turn += 1 
 
     def clear_terminal(self):
         os.system('cls' if os.name == 'nt' else 'clear')
