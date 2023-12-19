@@ -75,91 +75,27 @@ class Player:
         for card in self.hand.card_list:
             print(card)
 
-    def pretty_print_hand(self):
-        #TODO : remove all these stupid short vars and just put them directly inside the card iamge below
-
-        # Create shorter var names for card info so it can be formatted. 
-        c1n = self.hand.card1.name
-        c1m = self.hand.card1.mana
-        c1hp = self.hand.card1.health
-        c1de = self.hand.card1.desc_each
-        c1dc = self.hand.card1.desc_card_damage
-        c1dp = self.hand.card1.desc_player_damage
-        c1dfc = self.hand.card1.desc_finale_card_damage
-        c1ds = self.hand.card1.desc_swap
-        c1dsd = self.hand.card1.desc_swap_duration
-
-        c2n = self.hand.card2.name
-        c2m = self.hand.card2.mana
-        c2hp = self.hand.card2.health
-        c2de = self.hand.card2.desc_each
-        c2dc = self.hand.card2.desc_card_damage
-        c2dp = self.hand.card2.desc_player_damage
-        c2dfc = self.hand.card2.desc_finale_card_damage
-        c2ds = self.hand.card2.desc_swap
-        c2dsd = self.hand.card2.desc_swap_duration
-
-        c3n = self.hand.card3.name
-        c3m = self.hand.card3.mana
-        c3hp = self.hand.card3.health
-        c3de = self.hand.card3.desc_each
-        c3dc = self.hand.card3.desc_card_damage
-        c3dp = self.hand.card3.desc_player_damage
-        c3dfc = self.hand.card3.desc_finale_card_damage
-        c3ds = self.hand.card3.desc_swap
-        c3dsd = self.hand.card3.desc_swap_duration
-
-        c4n = self.hand.card4.name
-        c4m = self.hand.card4.mana
-        c4hp = self.hand.card4.health
-        c4de = self.hand.card4.desc_each
-        c4dc = self.hand.card4.desc_card_damage
-        c4dp = self.hand.card4.desc_player_damage
-        c4dfc = self.hand.card4.desc_finale_card_damage
-        c4ds = self.hand.card4.desc_swap
-        c4dsd = self.hand.card4.desc_swap_duration
-
+    def display_hand(self):
         print(f"""   
                 {self.name}'s Hand:                   
                 X===================================X   X===================================X   X===================================X   X===================================X
-                |{self.hand.card1.name:^35}|   |{c2n:^35}|   |{c3n:^35}|   |{c4n:^35}|
+                |{self.hand.card1.name:^35}|   |{self.hand.card2.name:^35}|   |{self.hand.card3.name:^35}|   |{self.hand.card4.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    
-                |MP:{c1m:<32}|   |MP:{c2m:<32}|   |MP:{c3m:<32}|   |MP:{c4m:<32}|
-                |HP:{c1hp:<32}|   |HP:{c2hp:<32}|   |HP:{c3hp:<32}|   |HP:{c4hp:<32}|         
+                |MP:{self.hand.card1.mana:<32}|   |MP:{self.hand.card2.mana:<32}|   |MP:{self.hand.card3.mana:<32}|   |MP:{self.hand.card4.mana:<32}|
+                |HP:{self.hand.card1.health:<32}|   |HP:{self.hand.card2.health:<32}|   |HP:{self.hand.card3.health:<32}|   |HP:{self.hand.card4.health:<32}|         
                 |                                   |   |                                   |   |                                   |   |                                   |         
-                |{c1de:^35}|   |{c2de:^35}|   |{c3de:^35}|   |{c4de:^35}|         
-                |{c1dc:^35}|   |{c2dc:^35}|   |{c3dc:^35}|   |{c4dc:^35}|         
-                |{c1dp:^35}|   |{c2dp:^35}|   |{c3dp:^35}|   |{c4dp:^35}|         
-                |{c1dfc:^35}|   |{c2dfc:^35}|   |{c3dfc:^35}|   |{c4dfc:^35}|         
+                |{self.hand.card1.desc_each:^35}|   |{self.hand.card2.desc_each:^35}|   |{self.hand.card3.desc_each:^35}|   |{self.hand.card4.desc_each:^35}|         
+                |{self.hand.card1.desc_card_damage:^35}|   |{self.hand.card2.desc_card_damage:^35}|   |{self.hand.card3.desc_card_damage:^35}|   |{self.hand.card4.desc_card_damage:^35}|         
+                |{self.hand.card1.desc_player_damage:^35}|   |{self.hand.card2.desc_player_damage:^35}|   |{self.hand.card3.desc_player_damage:^35}|   |{self.hand.card4.desc_player_damage:^35}|         
+                |{self.hand.card1.desc_finale_card_damage:^35}|   |{self.hand.card2.desc_finale_card_damage:^35}|   |{self.hand.card3.desc_finale_card_damage:^35}|   |{self.hand.card4.desc_finale_card_damage:^35}|         
                 |                                   |   |                                   |   |                                   |   |                                   |         
-                |{c1ds:^35}|   |{c2ds:^35}|   |{c3ds:^35}|   |{c4ds:^35}|         
-                |{c1dsd:^35}|   |{c2dsd:^35}|   |{c3dsd:^35}|   |{c4dsd:^35}|         
+                |{self.hand.card1.desc_swap:^35}|   |{self.hand.card2.desc_swap:^35}|   |{self.hand.card3.desc_swap:^35}|   |{self.hand.card4.desc_swap:^35}|         
+                |{self.hand.card1.desc_swap_duration:^35}|   |{self.hand.card2.desc_swap_duration:^35}|   |{self.hand.card3.desc_swap_duration:^35}|   |{self.hand.card4.desc_swap_duration:^35}|         
                 |                                   |   |                                   |   |                                   |   |                                   |         
                 |                                   |   |                                   |   |                                   |   |                                   |         
                 X===================================X   X===================================X   X===================================X   X===================================X
             """)
-
-
-
-
-        
+   
         # print(textwrap.dedent(f"""   
-        #     {self.name}'s hand:                   
-        #     X===================================X   X===================================X   X===================================X   X===================================X
-        #     |{self.hand.card1.name:^35}|   |{c2n:^35}|   |{c3n:^35}|   |{c4n:^35}|
-        #     |                                   |   |                                   |   |                                   |   |                                   |    
-        #     |MP:{c1m:<32}|   |MP:{c2m:<32}|   |MP:{c3m:<32}|   |MP:{c4m:<32}|
-        #     |HP:{c1hp:<32}|   |HP:{c2hp:<32}|   |HP:{c3hp:<32}|   |HP:{c4hp:<32}|         
-        #     |                                   |   |                                   |   |                                   |   |                                   |         
-        #     |{c1de:^35}|   |{c2de:^35}|   |{c3de:^35}|   |{c4de:^35}|         
-        #     |{c1dc:^35}|   |{c2dc:^35}|   |{c3dc:^35}|   |{c4dc:^35}|         
-        #     |{c1dp:^35}|   |{c2dp:^35}|   |{c3dp:^35}|   |{c4dp:^35}|         
-        #     |{c1dfc:^35}|   |{c2dfc:^35}|   |{c3dfc:^35}|   |{c4dfc:^35}|         
-        #     |                                   |   |                                   |   |                                   |   |                                   |         
-        #     |{c1ds:^35}|   |{c2ds:^35}|   |{c3ds:^35}|   |{c4ds:^35}|         
-        #     |{c1dsd:^35}|   |{c2dsd:^35}|   |{c3dsd:^35}|   |{c4dsd:^35}|         
-        #     |                                   |   |                                   |   |                                   |   |                                   |         
-        #     |                                   |   |                                   |   |                                   |   |                                   |         
-        #     X===================================X   X===================================X   X===================================X   X===================================X
         #     """))
 

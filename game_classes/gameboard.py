@@ -30,7 +30,7 @@ class GameBoard:
                 X===================================X   X===================================X   X===================================X   X===================================X
                 |{self.lane2.active_card.name:^35}|   |{self.lane4.active_card.name:^35}|   |{self.lane6.active_card.name:^35}|   |{self.lane8.active_card.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    
-                |                                   |   |                                   |   |                                   |   |                                   |
+                |MP:{self.lane2.active_card.mana:<32}|   |MP:{self.lane4.active_card.mana:<32}|   |MP:{self.lane6.active_card.mana:<32}|   |MP:{self.lane8.active_card.mana:<32}|
                 |                                   |   |                                   |   |                                   |   |                                   |
                 |                                   |   |                                   |   |                                   |   |                                   |         
                 |                                   |   |                                   |   |                                   |   |                                   |

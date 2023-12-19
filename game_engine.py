@@ -113,8 +113,9 @@ class Game_engine:
         card_to_place = self.current_player.get_card_by_name()
         lane_number = self.current_player.get_valid_lane_number()       
 
+
+        # TODO: Don't call this until each player has gone ! and call it for both
         self.gb.add_card_to_lane(card_to_place, lane_number)
-        
         self.gb.display_gameboard()
 
 
@@ -135,7 +136,7 @@ class Game_engine:
         self.player2.pretty_print_hand()
     
     def display_current_player_hand(self):
-        self.current_player.pretty_print_hand()
+        self.current_player.display_hand()
 
     def display_current_player_lanes(self):
         self.current_player.print_lane_list()
