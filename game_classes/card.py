@@ -64,9 +64,9 @@ class Card:
             elif self.swap_direction == "r":
                 self.desc_swap += f"**Swap with right card**"
                 self.desc_swap_duration += f"for {self.swap_duration} more turns"
-
-        def __str__(self):
-            return f"{self.name} - PC:{self.placement_cost} / H:{self.health} / TTA:{self.turns_to_activate}" 
+    
+    def __str__(self):
+        return f"{self.name}" 
         
-        
-
+    def __repr__(self):
+        return f"{self.name}"

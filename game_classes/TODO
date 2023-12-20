@@ -1,0 +1,8 @@
+Lane input validation not working 
+
+Player stats shouldn't be shown on scoreboard or p2 can see after p1 places cards. Make a separate "display_player_stats" function in player class,
+    and a wrapper in game_engine
+
+ Checks to make sure palyer has enough mana to play a card, and that lane they choose is empty, and that they have an open lane in general!
+
+ Make sure cards with None data aren't added to board in gameboard.add_card_to_lane func

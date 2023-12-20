@@ -37,9 +37,7 @@ class Game_engine:
         self.deal_mana()
 
         # Run display functions
-        self.display_round_info()
-        self.gb.display_gameboard()
-        self.display_current_player_hand()
+        # self.display_round_info()
 
         # Run placement phase 
         self.placement_phase()
@@ -106,23 +104,60 @@ class Game_engine:
         self.player2.add_mana(self.mana_per_turn)
 
     def placement_phase(self):
-        player1_placement_data_list = []
+        # Create new combat round to store card placement order from this rounds placement phase 
+        self.gb.create_new_combat_group()
 
-        player2_card_list_to_place = []
-        player2_lane_number_list = [] 
+        # Start as player 1 and display gameboard / player hand
+        self.current_player = self.player1
+        self.gb.display_gameboard()
+        self.display_current_player_hand()
 
-        # input validation handled by Player / Hand classes
+        # Card data per round 
+        player1_card_data_list = []
+        player2_card_data_list = []
+
+        # Get player 1 card placements 
         option = input("(s)elect card or (e)nd turn:")
         print(f"SELECTED: {option}")
         while option != "e": 
-            player1_placement_data_pair = self.player1.get_card_placement_data()
-            player1_placement_data_list.append(player1_placement_data_pair)
+            player1_card_data = self.player1.get_card_placement_data()
+            player1_card_data_list.append(player1_card_data)
             option = input("(s)elect card or (e)nd turn:")
 
+        # Switch to player 2 
+        # Display gameboard and player 2 hand, no updates made from player 1's actions though
+        self.current_player = self.player2
+        self.gb.display_gameboard()
+        self.display_current_player_hand()
 
-        # TODO: Don't call this until each player has gone ! and call it for both
-        # self.gb.add_card_to_lane(card_to_place, lane_number)
-        # self.gb.display_gameboard()
+        # Get player 2 card placements 
+        option = input("(s)elect card or (e)nd turn:")
+        print(f"SELECTED: {option}")
+        while option != "e": 
+            player2_card_data = self.player2.get_card_placement_data()
+            player2_card_data_list.append(player2_card_data)
+            option = input("(s)elect card or (e)nd turn:")
+
+        # Make sure each player placement data pair list is 4 long (All added data will be None)
+        for x in range(4):
+            if len(player1_card_data_list) < 4:
+                player1_card_data_list.append([None, None])
+            if len(player2_card_data_list) < 4:
+                player2_card_data_list.append([None, None])
+
+        # print(f"Player 1 card data list: {player1_card_data_list}")
+        # print(f"Player 2 card data list: {player2_card_data_list}")
+        
+        # # Add matching card pair to combat groups, based off data in each player_card_data_list
+        for i in range(4):
+            self.gb.add_card_to_combat_group(self.round, player1_card_data_list[i][0], player2_card_data_list[i][0])
+
+        # Add cards to gameboard 
+        for i in range(4):
+            self.gb.add_card_to_lane(player1_card_data_list[i][0], player1_card_data_list[i][1])
+            self.gb.add_card_to_lane(player2_card_data_list[i][0], player2_card_data_list[i][1])
+        
+        self.gb.display_gameboard()
 
     def print_player_decks(self):
         self.player1.print_deck()

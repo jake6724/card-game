@@ -1,13 +1,11 @@
 from game_classes.lane import Lane
-from game_classes.card import Card 
-import textwrap
-
+from game_classes.card import Card
+from game_classes.combatgroup import CombatGroup
 
 class GameBoard:
     def __init__(self): 
         self.empty_lane_card = Card("empty",0,0,0,0,"c",0,0,"c",0,0,"l",0)
         self.empty_lane_card.create_description()
-
         self.lane_list = [Lane(1, self.empty_lane_card), Lane(2, self.empty_lane_card), Lane(3, self.empty_lane_card), 
                         Lane(4, self.empty_lane_card), Lane(5, self.empty_lane_card), Lane(6, self.empty_lane_card),
                         Lane(7, self.empty_lane_card), Lane(8, self.empty_lane_card)] 
@@ -21,10 +19,28 @@ class GameBoard:
         self.lane7 = self.lane_list[6]
         self.lane8 = self.lane_list[7]
 
+        # Combat set up 
+        self.combat_group_list = []
+
+    def create_new_combat_group(self):
+        # This should be called at the start of each placement phase round 
+        new_combat_group = CombatGroup()
+        self.combat_group_list.append(new_combat_group)
+
+    def add_card_to_combat_group(self, round_number, card1, card2):
+        # This should be called during card placement 
+        cg = self.get_combat_group_by_round_num(round_number)
+        cg.add_card_pair(card1, card2)
+
     def add_card_to_lane(self, new_card: Card, lane_number: int):
         for lane in self.lane_list:
             if lane.number == lane_number:
                 lane.set_active_card(new_card)
+
+    def get_combat_group_by_round_num(self, round_number):
+        # Make round number accurate for indexing self.combat_group_list 
+        round_number =- 1 
+        return self.combat_group_list[round_number]
 
     def display_gameboard(self): 
         # TODO: Somehow it cant display card data only when the lane is empty............

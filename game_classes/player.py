@@ -30,13 +30,13 @@ class Player:
 
     def get_card_placement_data(self):
         # Wrapper function for get_card_by_name and get_valid_lane_number. 
-        # Checks that both return something other than None, before returning both values
-        card_name = self.get_card_by_name()
+        # Checks that both return something other than None, before returning both values as a list 
+        found_card = self.get_card_by_name()
         lane_number = self.get_valid_lane_number()
 
-        if card_name != None:
+        if found_card != None:
             if lane_number != None:
-                return [card_name, lane_number]
+                return [found_card, lane_number]
 
     def get_card_by_name(self):
         # Input validation handled in Hand class
