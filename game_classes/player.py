@@ -32,19 +32,19 @@ class Player:
         # Wrapper function for get_card_by_name and get_valid_lane_number. 
         # Checks that both return something other than None, before returning both values as a list 
         found_card = self.get_card_by_name()
-        lane_number = self.get_valid_lane_number()
-
         if found_card != None:
+            lane_number = self.get_valid_lane_number()
             if lane_number != None:
                 return [found_card, lane_number]
+
 
     def get_card_by_name(self):
         # Input validation handled in Hand class
         return self.hand.get_card_by_name()
         
     def get_valid_lane_number(self):
-        # is_lane_valid = False 
-        # # Check that lane is valid for current player 
+        # Get a valid lane number for current player to use in card placement  
+        is_lane_valid = False 
         # while is_lane_valid == False:
         lane_to_place_card = input(f"Select Lane (Your lanes: {self.get_lane_list_string()}): ")
         for lane in self.lane_list:

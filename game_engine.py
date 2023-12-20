@@ -112,12 +112,14 @@ class Game_engine:
         self.gb.display_gameboard()
         self.display_current_player_hand()
 
-        # Card data per round 
+        # Card data for this round 
         player1_card_data_list = []
         player2_card_data_list = []
 
         # Get player 1 card placements 
         option = input("(s)elect card or (e)nd turn:")
+        while option != "s" and option != "e":
+            option = str(input("(s)ELECT CARD or (e)ND TURN:"))
         print(f"SELECTED: {option}")
         while option != "e": 
             player1_card_data = self.player1.get_card_placement_data()
@@ -132,6 +134,8 @@ class Game_engine:
 
         # Get player 2 card placements 
         option = input("(s)elect card or (e)nd turn:")
+        while option != "s" and option != "e":
+            option = str(input("(s)ELECT CARD or (e)ND TURN:"))
         print(f"SELECTED: {option}")
         while option != "e": 
             player2_card_data = self.player2.get_card_placement_data()
@@ -145,8 +149,12 @@ class Game_engine:
             if len(player2_card_data_list) < 4:
                 player2_card_data_list.append([None, None])
 
-        # print(f"Player 1 card data list: {player1_card_data_list}")
-        # print(f"Player 2 card data list: {player2_card_data_list}")
+        # # Check if player hands are just filled with none (meaning no cards should try to be placed for them)
+        # if self.is_placement_data_all_null(player1_card_data_list) == True or 
+        # self.is_placement_data_all_null(player2_card_data_list)
+
+        print(f"Player 1 card data list: {player1_card_data_list}")
+        print(f"Player 2 card data list: {player2_card_data_list}")
         
         # # Add matching card pair to combat groups, based off data in each player_card_data_list
         for i in range(4):
@@ -157,8 +165,14 @@ class Game_engine:
             self.gb.add_card_to_lane(player1_card_data_list[i][0], player1_card_data_list[i][1])
             self.gb.add_card_to_lane(player2_card_data_list[i][0], player2_card_data_list[i][1])
         
-        self.gb.display_gameboard()
+        # self.gb.display_gameboard()
 
+    def is_placement_data_all_null(self, data_to_check):
+        for data in data_to_check:
+            if data[0] != None: 
+                return False 
+        return True 
+        
     def print_player_decks(self):
         self.player1.print_deck()
         self.player2.print_deck()

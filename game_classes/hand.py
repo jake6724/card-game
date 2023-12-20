@@ -13,10 +13,10 @@ class Hand():
             self.card4 = self.card_list[3]
 
     def get_card_by_name(self):
-        # is_card_in_hand = False
+        # Get a valid lane number for current player to use in card placement 
+        # Used in wrapper function player.get_card_placement_data
 
-        # Check that card exists in hand 
-        # while is_card_in_hand == False:
+        is_card_in_hand = False
         card_to_place_name = str(input("Select Card: "))
         for card in self.card_list:
             if card.name == card_to_place_name:
