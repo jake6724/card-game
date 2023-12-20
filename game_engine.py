@@ -109,49 +109,17 @@ class Game_engine:
 
         # Start as player 1 and display gameboard / player hand
         self.current_player = self.player1
-        self.gb.display_gameboard()
-        self.display_current_player_hand()
+        self.display_game()
 
-        # Card data for this round 
-        player1_card_data_list = []
-        player2_card_data_list = []
+        # Card placement data for this round 
+        self.current_player = self.player1
+        player1_card_data_list = self.player_placement_phase()
 
-        # Get player 1 card placements 
-        option = input("(s)elect card or (e)nd turn:")
-        while option != "s" and option != "e":
-            option = str(input("(s)ELECT CARD or (e)ND TURN:"))
-        print(f"SELECTED: {option}")
-        while option != "e": 
-            player1_card_data = self.player1.get_card_placement_data()
-            player1_card_data_list.append(player1_card_data)
-            option = input("(s)elect card or (e)nd turn:")
-
-        # Switch to player 2 
-        # Display gameboard and player 2 hand, no updates made from player 1's actions though
         self.current_player = self.player2
-        self.gb.display_gameboard()
-        self.display_current_player_hand()
+        player2_card_data_list = self.player_placement_phase()
 
-        # Get player 2 card placements 
-        option = input("(s)elect card or (e)nd turn:")
-        while option != "s" and option != "e":
-            option = str(input("(s)ELECT CARD or (e)ND TURN:"))
-        print(f"SELECTED: {option}")
-        while option != "e": 
-            player2_card_data = self.player2.get_card_placement_data()
-            player2_card_data_list.append(player2_card_data)
-            option = input("(s)elect card or (e)nd turn:")
-
-        # Make sure each player placement data pair list is 4 long (All added data will be None)
-        for x in range(4):
-            if len(player1_card_data_list) < 4:
-                player1_card_data_list.append([None, None])
-            if len(player2_card_data_list) < 4:
-                player2_card_data_list.append([None, None])
-
-        # # Check if player hands are just filled with none (meaning no cards should try to be placed for them)
-        # if self.is_placement_data_all_null(player1_card_data_list) == True or 
-        # self.is_placement_data_all_null(player2_card_data_list)
+        # Make sure each player placement data pair list is 4 long (All added data will be None pairs)
+        self.fill_out_player_placement_data(player1_card_data_list, player2_card_data_list)
 
         print(f"Player 1 card data list: {player1_card_data_list}")
         print(f"Player 2 card data list: {player2_card_data_list}")
@@ -161,11 +129,39 @@ class Game_engine:
             self.gb.add_card_to_combat_group(self.round, player1_card_data_list[i][0], player2_card_data_list[i][0])
 
         # Add cards to gameboard 
+        self.add_cards_to_gameboard(player1_card_data_list, player2_card_data_list)
+        
+        self.gb.display_gameboard()
+
+    def player_placement_phase(self):
+        self.display_game()
+        player_card_data_list = []
+
+        # Get current player card placements 
+        option = input("(s)elect card or (e)nd turn:")
+        while option != "s" and option != "e":
+            option = str(input("(s)ELECT CARD or (e)ND TURN:"))
+        print(f"SELECTED: {option}")
+        while option != "e": 
+            player_card_data = self.current_player.get_card_placement_data()
+            player_card_data_list.append(player_card_data)
+            option = input("(s)elect card or (e)nd turn:")
+
+        return player_card_data_list
+
+    def fill_out_player_placement_data(self, player1_card_data_list, player2_card_data_list):
+        # Make sure each player placement data pair list is 4 long (All added data will be None)
+        for x in range(4):
+            if len(player1_card_data_list) < 4:
+                player1_card_data_list.append([None, None])
+            if len(player2_card_data_list) < 4:
+                player2_card_data_list.append([None, None])
+
+    def add_cards_to_gameboard(self, player1_card_data_list, player2_card_data_list):
+        # Add cards to gameboard 
         for i in range(4):
             self.gb.add_card_to_lane(player1_card_data_list[i][0], player1_card_data_list[i][1])
             self.gb.add_card_to_lane(player2_card_data_list[i][0], player2_card_data_list[i][1])
-        
-        # self.gb.display_gameboard()
 
     def is_placement_data_all_null(self, data_to_check):
         for data in data_to_check:
@@ -194,6 +190,19 @@ class Game_engine:
 
     def display_current_player_lanes(self):
         self.current_player.print_lane_list()
+
+    def display_current_player_stats(self):
+        print(f"Playing as {self.current_player}")
+        print(f"Mana: {self.current_player.mana}")
+        print(f"Health: {self.current_player.health}")
+        print(f"Round Number: {self.round}")
+
+    def display_game(self):
+        # Display the game for the current player
+        # Wrapper to call many other display functions at once in a specified order
+        self.gb.display_gameboard()
+        self.display_current_player_hand()
+        self.display_current_player_stats()
 
     def display_round_info(self):
         # Display round, player health and mana, current mana dealt per turn 

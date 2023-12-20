@@ -2,23 +2,21 @@ DONE - Select turn option input validation
 
 DONE - add card AND Lane input validation not working 
 
-Add support so that if neither player plays a card then don't try to place anything 
+IDK ABOUT THIS ONE - Add support so that if neither player plays a card then don't try to place anything 
+
+Make sure cards with None data aren't added to board in gameboard.add_card_to_lane func
 
 Player stats shouldn't be shown on scoreboard or p2 can see after p1 places cards. Make a separate "display_player_stats" function in player class,
     and a wrapper in game_engine
 
- Checks to make sure palyer has enough mana to play a card, and that lane they choose is empty, and that they have an open lane in general!
+Checks to make sure palyer has enough mana to play a card, and that lane they choose is empty, and that they have an open lane in general!
 
- Make sure cards with None data aren't added to board in gameboard.add_card_to_lane func
+Remove cards from hand once they are added to the gameboard
 
- Remove cards from hand once they are added to the gameboard
-
-
- Data process card name so that they all are lower case and then when player enters card name send it all to lower case. Essential make card stuff case
+Data process card name so that they all are lower case and then when player enters card name send it all to lower case. Essential make card stuff case
     insensitive 
 
-
-turn getting player card placements into a sub function of placement phase to break up code 
+DONE - turn getting player card placements into a sub function of placement phase to break up code 
 
  
  

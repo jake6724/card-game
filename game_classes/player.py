@@ -10,6 +10,12 @@ class Player:
         #self.hand
         #self.lane_list
 
+    def __str__(self):
+        return f"{self.name}"
+
+    def __repr__(self):
+        return f"{self.name}"
+
     def add_deck(self, new_deck):
         self.deck = new_deck
 

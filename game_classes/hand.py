@@ -15,7 +15,6 @@ class Hand():
     def get_card_by_name(self):
         # Get a valid lane number for current player to use in card placement 
         # Used in wrapper function player.get_card_placement_data
-
         is_card_in_hand = False
         card_to_place_name = str(input("Select Card: "))
         for card in self.card_list:
