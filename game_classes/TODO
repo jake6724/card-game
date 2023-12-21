@@ -4,12 +4,14 @@ DONE - add card AND Lane input validation not working
 
 IDK ABOUT THIS ONE - Add support so that if neither player plays a card then don't try to place anything 
 
-Make sure cards with None data aren't added to board in gameboard.add_card_to_lane func
+DONE - Do not add None pairs to combat group
 
-Player stats shouldn't be shown on scoreboard or p2 can see after p1 places cards. Make a separate "display_player_stats" function in player class,
+DONE - Player stats shouldn't be shown on scoreboard or p2 can see after p1 places cards. Make a separate "display_player_stats" function in player class,
     and a wrapper in game_engine
 
-Checks to make sure palyer has enough mana to play a card, and that lane they choose is empty, and that they have an open lane in general!
+Checks to make sure palyer has enough mana to play a card, they own the lane, and that lane they choose is empty, 
+
+Figure out how and when to redispaly player stats, hand, and gameboard each time player adds a card to the board 
 
 Remove cards from hand once they are added to the gameboard
 
@@ -18,5 +20,144 @@ Data process card name so that they all are lower case and then when player ente
 
 DONE - turn getting player card placements into a sub function of placement phase to break up code 
 
+Fix the issue where mana removed from player is wrong. (or maybe displaying incorrectly)
+
+Change the lane ordering p1 = 1 - 4, p2 5 - 8
+    5 6 7 8 
+    1 2 3 4 
+
+
+Chec
  
  
+Fix this bug: 
+C:\Users\JakeA\Documents\card-game>py -u main.py
+Round Number: 1
+Mana Per Turn: 1
+
+                Gameboard:
+                X===================================X   X===================================X   X===================================X   X===================================X
+                |               empty               |   |               empty               |   |               empty               |   |               empty               |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                X===================================X   X===================================X   X===================================X   X===================================X
+                                Lane 2                                  Lane 4                                  Lane 6                                Lane 8
+                =============================================================================================================================================================
+                                Lane 1                                  Lane 3                                  Lane 5                                Lane 7
+                X===================================X   X===================================X   X===================================X   X===================================X
+                |               empty               |   |               empty               |   |               empty               |   |               empty               |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                X===================================X   X===================================X   X===================================X   X===================================X
+
+
+                PLAYER 1's Hand:
+                X===================================X   X===================================X   X===================================X   X===================================X
+                |                2B                 |   |                1A                 |   |                4D                 |   |                1A                 |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |               MP:2                |   |               MP:1                |   |               MP:5                |   |               MP:1                |
+                |               HP:4                |   |               HP:2                |   |               HP:2                |   |               HP:2                |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |             Each turn             |   |                                   |   |             Each turn             |   |                                   |
+                |     3 dmg to all enemy cards      |   |        3 dmg to enemy card        |   |        4 dmg to enemy card        |   |        3 dmg to enemy card        |
+                |                                   |   |       5 dmg to enemy player       |   |                                   |   |       5 dmg to enemy player       |
+                |                                   |   |                                   |   |  Fin: 10 dmg to all enemy cards   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                X===================================X   X===================================X   X===================================X   X===================================X
+
+Playing as PLAYER 1
+Mana: 1
+Health: 20
+Enter card or (e)nd turn:1A
+Enter lane: 1
+Round Number: 1
+Mana Per Turn: 1
+
+                Gameboard:
+                X===================================X   X===================================X   X===================================X   X===================================X
+                |               empty               |   |               empty               |   |               empty               |   |               empty               |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                X===================================X   X===================================X   X===================================X   X===================================X
+                                Lane 2                                  Lane 4                                  Lane 6                                Lane 8
+                =============================================================================================================================================================
+                                Lane 1                                  Lane 3                                  Lane 5                                Lane 7
+                X===================================X   X===================================X   X===================================X   X===================================X
+                |               empty               |   |               empty               |   |               empty               |   |               empty               |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                X===================================X   X===================================X   X===================================X   X===================================X
+
+
+                PLAYER 1's Hand:
+                X===================================X   X===================================X   X===================================X   X===================================X
+                |                2B                 |   |                4D                 |   |               empty               |   |               empty               |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |               MP:2                |   |               MP:5                |   |                                   |   |                                   |
+                |               HP:4                |   |               HP:2                |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |             Each turn             |   |             Each turn             |   |                                   |   |                                   |
+                |     3 dmg to all enemy cards      |   |        4 dmg to enemy card        |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |  Fin: 10 dmg to all enemy cards   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                |                                   |   |                                   |   |                                   |   |                                   |
+                X===================================X   X===================================X   X===================================X   X===================================X
+
+Playing as PLAYER 1
+Mana: 0
+Health: 20
+Enter card or (e)nd turn:e
+
+(Removes both 1A instances!)

@@ -7,7 +7,8 @@ class CombatGroup:
     def __init__(self):
         self.card_pair_list = []
     
-    def add_card_pair(self, card1: Card, card2: Card):
-        self.card_pair_list.append([card1, card2])
+    def add_card_pair(self, card1, card2):
+        if card1 != None or card2 != None:
+            self.card_pair_list.append([card1, card2])
 
     

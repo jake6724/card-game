@@ -1,7 +1,7 @@
 class Card: 
     def __init__(self, name: str, mana: int, health: int, start_turn: int, end_turn, card_target: str, card_damage: int, player_damage: int, finale_card_target: str, finale_card_damage: int, finale_player_damage: int, swap_direction: str, swap_duration: int): 
         self.name = name 
-        self.mana = mana 
+        self.mana = int(mana) 
         self.health = int(health)
         self.start_turn = int(start_turn)
         self.end_turn = int(end_turn)
@@ -13,6 +13,9 @@ class Card:
         self.finale_player_damage = int(finale_player_damage)
         self.swap_direction = str(swap_direction)
         self.swap_duration = int(swap_duration)
+        self.priority = ""
+        self.lane_num = None
+        self.create_description()
 
     def create_description(self):
         # Set up desc text vars 
@@ -65,8 +68,14 @@ class Card:
                 self.desc_swap += f"**Swap with right card**"
                 self.desc_swap_duration += f"for {self.swap_duration} more turns"
     
+    def add_priority(self, round_num, card_priority):
+        self.priority = str(round_num) + str(card_priority)
+        
+    def add_lane_number(self, l):
+        self.lane_num = l 
+
     def __str__(self):
-        return f"{self.name}" 
+        return f"{self.name}: {self.priority}" 
         
     def __repr__(self):
         return f"{self.name}"

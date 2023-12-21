@@ -32,9 +32,11 @@ class GameBoard:
         cg = self.get_combat_group_by_round_num(round_number)
         cg.add_card_pair(card1, card2)
 
-    def add_card_to_lane(self, new_card: Card, lane_number: int):
+    def add_card_to_lane(self, new_card: Card):
+        # TODO: Add card into internal active cards list 
+
         for lane in self.lane_list:
-            if lane.number == lane_number:
+            if lane.number == new_card.lane_num:
                 lane.set_active_card(new_card)
 
     def get_combat_group_by_round_num(self, round_number):
@@ -49,8 +51,8 @@ class GameBoard:
                 X===================================X   X===================================X   X===================================X   X===================================X
                 |{self.lane2.active_card.name:^35}|   |{self.lane4.active_card.name:^35}|   |{self.lane6.active_card.name:^35}|   |{self.lane8.active_card.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    
-                |{self.lane2.active_card.desc_mana:^35}|   |{self.lane4.active_card.desc_mana:<35}|   |{self.lane6.active_card.desc_mana:<35}|   |{self.lane8.active_card.desc_mana:<35}|
-                |{self.lane2.active_card.desc_health:^35}|   |{self.lane4.active_card.desc_health:<35}|   |{self.lane6.active_card.desc_health:<35}|   |{self.lane8.active_card.desc_health:<35}|
+                |{self.lane2.active_card.desc_mana:^35}|   |{self.lane4.active_card.desc_mana:^35}|   |{self.lane6.active_card.desc_mana:^35}|   |{self.lane8.active_card.desc_mana:^35}|
+                |{self.lane2.active_card.desc_health:^35}|   |{self.lane4.active_card.desc_health:^35}|   |{self.lane6.active_card.desc_health:^35}|   |{self.lane8.active_card.desc_health:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |         
                 |                                   |   |                                   |   |                                   |   |                                   |
                 |                                   |   |                                   |   |                                   |   |                                   |
@@ -68,8 +70,8 @@ class GameBoard:
                 X===================================X   X===================================X   X===================================X   X===================================X
                 |{self.lane1.active_card.name:^35}|   |{self.lane3.active_card.name:^35}|   |{self.lane5.active_card.name:^35}|   |{self.lane7.active_card.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    
-                |{self.lane1.active_card.desc_mana:^35}|   |{self.lane3.active_card.desc_mana:<35}|   |{self.lane5.active_card.desc_mana:<35}|   |{self.lane7.active_card.desc_mana:<35}|
-                |{self.lane1.active_card.desc_health:^35}|   |{self.lane3.active_card.desc_health:<35}|   |{self.lane5.active_card.desc_health:<35}|   |{self.lane7.active_card.desc_health:<35}|
+                |{self.lane1.active_card.desc_mana:^35}|   |{self.lane3.active_card.desc_mana:^35}|   |{self.lane5.active_card.desc_mana:^35}|   |{self.lane7.active_card.desc_mana:^35}|
+                |{self.lane1.active_card.desc_health:^35}|   |{self.lane3.active_card.desc_health:^35}|   |{self.lane5.active_card.desc_health:^35}|   |{self.lane7.active_card.desc_health:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |         
                 |                                   |   |                                   |   |                                   |   |                                   |
                 |                                   |   |                                   |   |                                   |   |                                   |

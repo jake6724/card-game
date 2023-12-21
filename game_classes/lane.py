@@ -1,9 +1,9 @@
 from game_classes.card import Card
 
 class Lane:
-    def __init__(self, lane_number: int, starting_card: Card):
-        self.number = lane_number 
-        self.active_card = starting_card
+    def __init__(self, lane_number, empty_lane_card: Card):
+        self.number = str(lane_number)
+        self.active_card = empty_lane_card
 
     def set_active_card(self, new_card):
         self.active_card = new_card

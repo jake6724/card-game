@@ -20,7 +20,7 @@ class Game_engine:
         self.max_placement_cost_to_duplicate = 3
         self.current_player = self.player1
         self.round = 0 
-        self.mana_per_turn = 1
+        self.mana_per_turn = 0
         self.round_interval_to_increase_mana = 10
         self.max_mana_per_turn = 6
         self.winner = None
@@ -31,16 +31,13 @@ class Game_engine:
         self.gen_gameboard_assign__player_lanes()
 
     def run_game_loop(self):
-        # while self.winner == None: 
-        self.round += 1 
-        
-        self.deal_mana()
+        while self.winner == None: 
+            self.round += 1 
 
-        # Run display functions
-        # self.display_round_info()
-
-        # Run placement phase 
-        self.placement_phase()
+            self.deal_mana()
+            
+            # Run placement phase 
+            self.placement_phase()
 
     def gen_player_decks(self):
         player1_deck = Deck() 
@@ -85,10 +82,6 @@ class Game_engine:
         self.player1.add_hand(player1_hand)
         self.player2.add_hand(player2_hand)
 
-        for i in range(self.hand_size): 
-            self.player1.draw_card()
-            self.player2.draw_card()
-
     def gen_gameboard_assign__player_lanes(self):
         gb = GameBoard()
         self.gb = gb
@@ -99,55 +92,98 @@ class Game_engine:
         # self.print_player_lanes()
 
     def deal_mana(self):
+        self.player1.clear_mana()
+        self.player2.clear_mana()
+
         self.determine_mana_amount()
         self.player1.add_mana(self.mana_per_turn)
         self.player2.add_mana(self.mana_per_turn)
 
+    def draw_player_cards(self):
+        # Remove the empty card if it exists currently. There is only 1 that is a placeholder for all empty spaces in the hand
+        for card in self.player1.hand.card_list:
+            if card.name == "empty":
+                self.player1.hand.card_list.remove(card)
+
+        for card in self.player2.hand.card_list:
+            if card.name == "empty":
+                self.player2.hand.card_list.remove(card)
+        
+        while len(self.player1.hand.card_list) != self.hand_size:
+            self.player1.draw_card()
+
+        while len(self.player2.hand.card_list) != self.hand_size:
+            self.player2.draw_card()
+        
+
     def placement_phase(self):
-        # Create new combat round to store card placement order from this rounds placement phase 
-        self.gb.create_new_combat_group()
+        # Draw cards back to full
+        self.draw_player_cards()
 
-        # Start as player 1 and display gameboard / player hand
         self.current_player = self.player1
-        self.display_game()
-
-        # Card placement data for this round 
-        self.current_player = self.player1
-        player1_card_data_list = self.player_placement_phase()
+        p1_cards_to_add = self.player_placement_phase()
 
         self.current_player = self.player2
-        player2_card_data_list = self.player_placement_phase()
+        p2_cards_to_add = self.player_placement_phase()
 
-        # Make sure each player placement data pair list is 4 long (All added data will be None pairs)
-        self.fill_out_player_placement_data(player1_card_data_list, player2_card_data_list)
+        if len(p1_cards_to_add) != 0:
+            for card in p1_cards_to_add:
+                self.gb.add_card_to_lane(card)
+            print("P1 Cards added to GB")
 
-        print(f"Player 1 card data list: {player1_card_data_list}")
-        print(f"Player 2 card data list: {player2_card_data_list}")
-        
-        # # Add matching card pair to combat groups, based off data in each player_card_data_list
-        for i in range(4):
-            self.gb.add_card_to_combat_group(self.round, player1_card_data_list[i][0], player2_card_data_list[i][0])
-
-        # Add cards to gameboard 
-        self.add_cards_to_gameboard(player1_card_data_list, player2_card_data_list)
-        
-        self.gb.display_gameboard()
+        if len(p2_cards_to_add) != 0:
+            for card in p2_cards_to_add:
+                self.gb.add_card_to_lane(card)
+            print("P2 Cards added to GB")
 
     def player_placement_phase(self):
         self.display_game()
-        player_card_data_list = []
+        card_priorities = ["a", "b", "c", "d"]
+        card_priority_counter = 0
+        cards_to_add = []
+        option = ""
+
+        option = input("Enter card or (e)nd turn:")
 
         # Get current player card placements 
-        option = input("(s)elect card or (e)nd turn:")
-        while option != "s" and option != "e":
-            option = str(input("(s)ELECT CARD or (e)ND TURN:"))
-        print(f"SELECTED: {option}")
-        while option != "e": 
-            player_card_data = self.current_player.get_card_placement_data()
-            player_card_data_list.append(player_card_data)
-            option = input("(s)elect card or (e)nd turn:")
+        while option != "e":
+            if self.current_player.is_card_in_hand(option):
+                card = self.current_player.get_card_by_name(option)
+                if self.current_player.has_enough_mana(card):
+                    lane_option = input(f"Enter lane ({self.current_player.get_lane_list_string()}):")
+                    if self.current_player.is_lane_valid(lane_option):
+                        lane = self.current_player.get_lane_by_number(lane_option)
+                        if self.current_player.is_lane_occupied(lane) == False:
+                            # Update card priority
+                            self.current_player.update_card_priority(card, self.round, card_priorities[card_priority_counter])
+                            card_priority_counter += 1 
 
-        return player_card_data_list
+                            # Remove card from player hand 
+                            self.current_player.remove_card_from_hand(card)
+
+                            # Add lane number to card 
+                            card.add_lane_number(lane.number)
+
+                            # Remove player mana based on card mana cost 
+                            self.current_player.remove_mana(card.mana)
+
+                            # Add card to list to add to gameboard
+                            cards_to_add.append(card)
+
+                            # Redisplay board with updated player info
+                            self.display_game()
+                        else:
+                            print("Lane occupied!")
+                    else:
+                        print("Invalid Lane!")
+                else:
+                    print("Not enough mana!")
+            else:
+                print("You don't have this card!")
+            
+            option = input("Enter card or (e)nd turn:")
+                
+        return cards_to_add
 
     def fill_out_player_placement_data(self, player1_card_data_list, player2_card_data_list):
         # Make sure each player placement data pair list is 4 long (All added data will be None)
@@ -195,28 +231,32 @@ class Game_engine:
         print(f"Playing as {self.current_player}")
         print(f"Mana: {self.current_player.mana}")
         print(f"Health: {self.current_player.health}")
-        print(f"Round Number: {self.round}")
 
     def display_game(self):
         # Display the game for the current player
         # Wrapper to call many other display functions at once in a specified order
-        self.gb.display_gameboard()
+        # os.system('cls')
+        # self.clear_terminal()
+        self.display_round_info()
+        self.display_gameboard()
         self.display_current_player_hand()
         self.display_current_player_stats()
 
+    def display_gameboard(self):
+        self.gb.display_gameboard()
+
     def display_round_info(self):
-        # Display round, player health and mana, current mana dealt per turn 
-        print(f"{self.player1.name} - HP: {self.player1.health} MP: {self.player1.mana}")
-        print(f"{self.player2.name} - HP: {self.player2.health} MP: {self.player2.mana} ")
-        print(f"Current mana per turn:{self.mana_per_turn}")
-        print()
-        print(f"{self.current_player.name}'s TURN")
+        print(f"Round Number: {self.round}")
+        print(f"Mana Per Turn: {self.mana_per_turn}")
 
     def determine_mana_amount(self):
-        # Check round number and determine how much mana should be dealt each round currently
-        if self.round % self.round_interval_to_increase_mana == 0:
-            if self.mana_per_turn <= self.max_mana_per_turn: 
-                self.mana_per_turn += 1 
+        # # Check round number and determine how much mana should be dealt each round currently
+        # if self.round % self.round_interval_to_increase_mana == 0:
+        #     if self.mana_per_turn <= self.max_mana_per_turn: 
+        #         self.mana_per_turn += 1 
+        
+        if self.round <= 6:
+            self.mana_per_turn += 1
 
     def clear_terminal(self):
         os.system('cls' if os.name == 'nt' else 'clear')
