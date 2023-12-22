@@ -13,7 +13,7 @@ class Card:
         self.finale_player_damage = int(finale_player_damage)
         self.swap_direction = str(swap_direction)
         self.swap_duration = int(swap_duration)
-        self.priority = ""
+        self.priority = None
         self.lane_num = None
         self.create_description()
 
@@ -69,13 +69,14 @@ class Card:
                 self.desc_swap_duration += f"for {self.swap_duration} more turns"
     
     def add_priority(self, round_num, card_priority):
-        self.priority = str(round_num) + str(card_priority)
+        p = str(round_num) + str(card_priority)
+        self.priority = int(p)
         
     def add_lane_number(self, l):
         self.lane_num = l 
 
     def __str__(self):
-        return f"{self.name}: {self.priority}" 
+        return f"Card Name: {self.name} - Priority: {self.priority}" 
         
     def __repr__(self):
         return f"{self.name}"

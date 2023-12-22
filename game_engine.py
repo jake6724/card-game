@@ -39,6 +39,9 @@ class Game_engine:
             # Run placement phase 
             self.placement_phase()
 
+            # Run combat phase 
+            self.combat_phase()
+
     def gen_player_decks(self):
         player1_deck = Deck() 
         player2_deck = Deck() 
@@ -115,7 +118,6 @@ class Game_engine:
         while len(self.player2.hand.card_list) != self.hand_size:
             self.player2.draw_card()
         
-
     def placement_phase(self):
         # Draw cards back to full
         self.draw_player_cards()
@@ -128,17 +130,21 @@ class Game_engine:
 
         if len(p1_cards_to_add) != 0:
             for card in p1_cards_to_add:
+                self.gb.add_to_active_cards(card)
                 self.gb.add_card_to_lane(card)
             print("P1 Cards added to GB")
 
         if len(p2_cards_to_add) != 0:
             for card in p2_cards_to_add:
+                self.gb.add_to_active_cards(card)
                 self.gb.add_card_to_lane(card)
             print("P2 Cards added to GB")
 
+        self.gb.print_active_card_list()
+
     def player_placement_phase(self):
         self.display_game()
-        card_priorities = ["a", "b", "c", "d"]
+        card_priorities = ["1", "2", "3", "4"]
         card_priority_counter = 0
         cards_to_add = []
         option = ""
@@ -155,9 +161,9 @@ class Game_engine:
                         lane = self.current_player.get_lane_by_number(lane_option)
                         if self.current_player.is_lane_occupied(lane) == False:
                             # Update card priority
-                            self.current_player.update_card_priority(card, self.round, card_priorities[card_priority_counter])
+                            card.add_priority(self.round, card_priorities[card_priority_counter])
                             card_priority_counter += 1 
-
+                            
                             # Remove card from player hand 
                             self.current_player.remove_card_from_hand(card)
 
@@ -182,8 +188,17 @@ class Game_engine:
                 print("You don't have this card!")
             
             option = input("Enter card or (e)nd turn:")
-                
+
         return cards_to_add
+
+    def combat_phase(self):
+        # Sort gb.active_card list based on card priority var
+
+        # for each card in this sorted list, check if the card after it has the same priority
+        # if yes, put them both into a combat function
+        # if no call the same combat function but with just the one 
+        # in betweeen combat function calls, update card values
+        pass 
 
     def fill_out_player_placement_data(self, player1_card_data_list, player2_card_data_list):
         # Make sure each player placement data pair list is 4 long (All added data will be None)

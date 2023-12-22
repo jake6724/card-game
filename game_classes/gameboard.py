@@ -1,6 +1,7 @@
 from game_classes.lane import Lane
 from game_classes.card import Card
 from game_classes.combatgroup import CombatGroup
+import time 
 
 class GameBoard:
     def __init__(self): 
@@ -19,8 +20,13 @@ class GameBoard:
         self.lane7 = self.lane_list[6]
         self.lane8 = self.lane_list[7]
 
+        self.active_card_list = []
+    
         # Combat set up 
         self.combat_group_list = []
+
+    def add_to_active_cards(self, card_to_add):
+        self.active_card_list.append(card_to_add)
 
     def create_new_combat_group(self):
         # This should be called at the start of each placement phase round 
@@ -43,6 +49,12 @@ class GameBoard:
         # Make round number accurate for indexing self.combat_group_list 
         round_number =- 1 
         return self.combat_group_list[round_number]
+    
+    def print_active_card_list(self):
+        print("Gameboard Active Card List:")
+        for card in self.active_card_list:
+            print(card)
+        time.sleep(2)
 
     def display_gameboard(self): 
         # TODO: Somehow it cant display card data only when the lane is empty............
