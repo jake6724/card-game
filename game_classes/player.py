@@ -34,6 +34,9 @@ class Player:
     def clear_mana(self):
         self.mana = 0
 
+    def take_damage(self, damage_amount):
+        self.health -= damage_amount
+
     def print_deck(self):
         self.deck.print_card_list()
 
@@ -143,7 +146,6 @@ class Player:
 
     def display_hand(self):
         print(f"""   
-                {self.name}'s Hand:        
                 X===================================X   X===================================X   X===================================X   X===================================X
                 |{self.hand.card1.name:^35}|   |{self.hand.card2.name:^35}|   |{self.hand.card3.name:^35}|   |{self.hand.card4.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    

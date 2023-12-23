@@ -13,6 +13,9 @@ class Deck:
     def add_card_list(self, new_card_list):
         self.card_list = new_card_list
 
+    def get_card_by_number(self, index):
+        return self.card_list[index]
+
     def print_card_list(self):
         for card in self.card_list:
             print(card)

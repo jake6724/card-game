@@ -40,7 +40,7 @@ class Game_engine:
             self.placement_phase()
 
             # # Run combat phase 
-            # self.combat_phase()
+            self.combat_phase()
 
     def gen_player_decks(self):
         player1_deck = Deck() 
@@ -51,7 +51,6 @@ class Game_engine:
         card_data = open(self.card_data_file, "r")
         for line in card_data:
             line_data_list = line.split() 
-            print(line_data_list)
             new_card = create_new_card(line_data_list)
     
             temp_card_list.append(new_card)
@@ -68,6 +67,14 @@ class Game_engine:
         # Assign decks to player (exact copies of each other w/ same shuffling)
         player1_deck.add_card_list(temp_card_list)
         player2_deck.add_card_list(copy.deepcopy(temp_card_list))
+
+        # Set player value for each card in player decks 
+        for i in range(len(temp_card_list)):
+            p1_card = player1_deck.get_card_by_number(i)
+            p1_card.add_player(self.player1)
+
+            p2_card = player2_deck.get_card_by_number(i)
+            p2_card.add_player(self.player2)
 
         return [player1_deck, player2_deck]
 
@@ -189,29 +196,26 @@ class Game_engine:
         return cards_to_add
 
     def combat_phase(self):
+        print("Running combat phase")
         # Sort gb.active_card list based on card priority var
         self.gb.sort_active_cards()
-
-        # For each card reactive and reset turn taken to false 
+        self.gb.reset_card_turns()
 
         # Main combat loop 
         # Get each card in sorted active cards list 
-        for i in range(self.gb.active_card_list):
+        for i in range(len(self.gb.active_card_list)):
             card = self.gb.active_card_list[i]
             # Check if card has used its turn yet
             if card.taken_turn == False:
                 # If not, run its combat actions
                 self.gb.run_card_combat_actions(card, self.player1, self.player2)
+                card.taken_turn = True
             
             # Check that current card is not the last card in list (index would go out of range)
             if i != (len(self.gb.active_card_list) - 1):
                 # If next card DOES NOT have same priority, update game board
                 if self.gb.active_card_list[i + 1].priority == card.priority:
                     self.gb.update()
-        
-            card.taken_turn = True 
-            
-
 
     def fill_out_player_placement_data(self, player1_card_data_list, player2_card_data_list):
         # Make sure each player placement data pair list is 4 long (All added data will be None)
@@ -274,8 +278,7 @@ class Game_engine:
         self.gb.display_gameboard()
 
     def display_round_info(self):
-        print(f"Round Number: {self.round}")
-        print(f"Mana Per Turn: {self.mana_per_turn}")
+        print(f"Round Number: {self.round}      Mana Per Turn: {self.mana_per_turn}")
 
     def determine_mana_amount(self):
         # # Check round number and determine how much mana should be dealt each round currently

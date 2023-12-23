@@ -90,9 +90,15 @@ class Card:
             else:
                 self.desc_finale_swap += f"Swap Right"
 
+    def take_damage(self, damage_amount):
+        self.health -= damage_amount
+
     def add_priority(self, round_num, card_priority):
         p = str(round_num) + str(card_priority)
         self.priority = int(p)
+
+    def add_player(self, player):
+        self.player = player 
         
     def add_lane_number(self, l):
         self.lane_num = l 

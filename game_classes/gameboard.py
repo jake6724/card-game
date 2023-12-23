@@ -32,26 +32,58 @@ class GameBoard:
         self.active_card_list.sort(key= self.get_card_priority)
         print("Log: Cards sorted")
 
+    def reset_card_turns(self):
+        for card in self.active_card_list:
+            card.taken_turn = False 
+
     def run_card_combat_actions(self, card: Card, p1: Player, p2: Player):
         # Order of operations for attacking 
         # swap
         # card damage
         # player damage 
 
-        # CHECK IF LOWER LANE OR UPPER LANE AND THEN USE THAT TO GET TARGET CARD UGH 
-        card_target = self.get_lane_by_number(card.lane_num + 4).active_card
-        
-        player_target = p1 if card.player == p2 else p2 # double check this 
+        card_target = ""
+        card_all_targets = ""
+        player_target = None
+
+        # Get targets based on card data 
+        if card.player == p1:
+            card_target = self.get_lane_by_number(int(card.lane_num) + 4).active_card
+            card_all_targets = [self.lane5.active_card, self.lane6.active_card, self.lane7.active_card, self.lane8.active_card]
+            player_target = p2
+        elif card.player == p2:
+            card_target = self.get_lane_by_number(int(card.lane_num) - 4).active_card
+            card_all_targets = [self.lane1.active_card, self.lane2.active_card, self.lane3.active_card, self.lane4.active_card]
+            player_target = p1
+
+        print(f"Card Target: {card_target}")
+        print(f"Card All Targets: {card_all_targets}")
+        print(f"Player Target: {player_target}")
 
         # Determine whether to do repeat or finale moves
         if card.counter == card.end_turn:
-            # Add checks to see if even needed based on damage/ swap info? 
             if card.finale_card_target == "c":
-                
+                card_target.take_damage(card.finale_card_damage) # Deal damage to opponent card based on current cards finale_card_damage 
+            elif card.finale_card_target == "a":
+                for target in card_all_targets:
+                    target.take_damage(card.finale_card_damage) # Deal damage to all opponent cards based on current cards finale_card_damage 
+            
+            if card.finale_player_damage > 0:
+                player_target.take_damage(card.finale_player_damage) # Deal damage to player target based on current card finale_player_damage 
+
+        elif card.counter >= card.start_turn: # Do repeat moves
+            if card.repeat_card_target == "c":
+                card_target.take_damage(card.repeat_card_damage)
+            elif card.repeat_card_target == "a":
+                for target in card_all_targets:
+                    target.take_damage(card.repeat_card_damage)
+            
+            if card.repeat_player_damage > 0:
+                player_target.take_damage(card.repeat_player_damage)
 
 
     def update(self):
-        for card in self.active_card_list():
+        for card in self.active_card_list:
             if card.health <= 0:
                 self.remove_active_card(card)
 
@@ -95,7 +127,6 @@ class GameBoard:
     def display_gameboard(self): 
         # TODO: Somehow it cant display card data only when the lane is empty............
         print(f"""   
-                Gameboard:
                 X===================================X   X===================================X   X===================================X   X===================================X
                 |{self.lane5.active_card.name:^35}|   |{self.lane6.active_card.name:^35}|   |{self.lane7.active_card.name:^35}|   |{self.lane8.active_card.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    
