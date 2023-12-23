@@ -8,8 +8,8 @@ class Lane:
     def set_active_card(self, new_card):
         self.active_card = new_card
     
-    def remove_active_card(self):
-        self.active_card = None
+    # def remove_active_card(self):
+    #     self.active_card = empty
 
     def __str__(self):
         return f"{self.number}"

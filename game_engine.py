@@ -39,8 +39,8 @@ class Game_engine:
             # Run placement phase 
             self.placement_phase()
 
-            # Run combat phase 
-            self.combat_phase()
+            # # Run combat phase 
+            # self.combat_phase()
 
     def gen_player_decks(self):
         player1_deck = Deck() 
@@ -51,11 +51,10 @@ class Game_engine:
         card_data = open(self.card_data_file, "r")
         for line in card_data:
             line_data_list = line.split() 
+            print(line_data_list)
             new_card = create_new_card(line_data_list)
     
             temp_card_list.append(new_card)
-            # Have card create it's description here also
-            new_card.create_description()
         
         # Duplicate all cards with value <= self.max_placement_cost_to_duplicate
         duplicated_cards = duplicate_cards(temp_card_list)
@@ -89,8 +88,8 @@ class Game_engine:
         gb = GameBoard()
         self.gb = gb
 
-        self.player1.add_lane_list(gb.lane_list[0::2])
-        self.player2.add_lane_list(gb.lane_list[1::2])
+        self.player1.add_lane_list(gb.lane_list[0:4])
+        self.player2.add_lane_list(gb.lane_list[4:])
 
         # self.print_player_lanes()
 
@@ -140,12 +139,10 @@ class Game_engine:
                 self.gb.add_card_to_lane(card)
             print("P2 Cards added to GB")
 
-        self.gb.print_active_card_list()
-
     def player_placement_phase(self):
         self.display_game()
-        card_priorities = ["1", "2", "3", "4"]
-        card_priority_counter = 0
+        # card_priorities = ["1", "2", "3", "4"]
+        card_priority_counter = 1
         cards_to_add = []
         option = ""
 
@@ -161,9 +158,9 @@ class Game_engine:
                         lane = self.current_player.get_lane_by_number(lane_option)
                         if self.current_player.is_lane_occupied(lane) == False:
                             # Update card priority
-                            card.add_priority(self.round, card_priorities[card_priority_counter])
+                            card.add_priority(self.round, card_priority_counter)
                             card_priority_counter += 1 
-                            
+
                             # Remove card from player hand 
                             self.current_player.remove_card_from_hand(card)
 
@@ -193,12 +190,28 @@ class Game_engine:
 
     def combat_phase(self):
         # Sort gb.active_card list based on card priority var
+        self.gb.sort_active_cards()
 
-        # for each card in this sorted list, check if the card after it has the same priority
-        # if yes, put them both into a combat function
-        # if no call the same combat function but with just the one 
-        # in betweeen combat function calls, update card values
-        pass 
+        # For each card reactive and reset turn taken to false 
+
+        # Main combat loop 
+        # Get each card in sorted active cards list 
+        for i in range(self.gb.active_card_list):
+            card = self.gb.active_card_list[i]
+            # Check if card has used its turn yet
+            if card.taken_turn == False:
+                # If not, run its combat actions
+                self.gb.run_card_combat_actions(card, self.player1, self.player2)
+            
+            # Check that current card is not the last card in list (index would go out of range)
+            if i != (len(self.gb.active_card_list) - 1):
+                # If next card DOES NOT have same priority, update game board
+                if self.gb.active_card_list[i + 1].priority == card.priority:
+                    self.gb.update()
+        
+            card.taken_turn = True 
+            
+
 
     def fill_out_player_placement_data(self, player1_card_data_list, player2_card_data_list):
         # Make sure each player placement data pair list is 4 long (All added data will be None)

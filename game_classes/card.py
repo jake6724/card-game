@@ -1,73 +1,95 @@
 class Card: 
-    def __init__(self, name: str, mana: int, health: int, start_turn: int, end_turn, card_target: str, card_damage: int, player_damage: int, finale_card_target: str, finale_card_damage: int, finale_player_damage: int, swap_direction: str, swap_duration: int): 
-        self.name = name 
+    def __init__(self, name: str, mana: int, health: int, start_turn: int, end_turn: int, repeat_card_target: str, repeat_card_damage: int, repeat_player_damage: int, repeat_swap_direction: str, repeat_swap_duration: int, finale_card_target: str, finale_card_damage: int, finale_player_damage: int, finale_swap_direction: str): 
+        self.name = name.replace("_", " ")
         self.mana = int(mana) 
         self.health = int(health)
         self.start_turn = int(start_turn)
         self.end_turn = int(end_turn)
-        self.card_target = str(card_target)
-        self.card_damage = int(card_damage)
-        self.player_damage = int(player_damage)
+        self.repeat_card_target = str(repeat_card_target)
+        self.repeat_card_damage = int(repeat_card_damage)
+        self.repeat_player_damage = int(repeat_player_damage)
+        self.repeat_swap_direction = str(repeat_swap_direction)
+        self.repeat_swap_duration = int(repeat_swap_duration)
         self.finale_card_target = str(finale_card_target)
         self.finale_card_damage = int(finale_card_damage)
         self.finale_player_damage = int(finale_player_damage)
-        self.swap_direction = str(swap_direction)
-        self.swap_duration = int(swap_duration)
+        self.finale_swap_direction = str(finale_swap_direction)
+
+        self.player = None
         self.priority = None
         self.lane_num = None
+        self.taken_turn = False
+        self.counter = 0 
+
         self.create_description()
 
-    def create_description(self):
+    def create_description(self):                                         
         # Set up desc text vars 
         if self.name == "empty": # Make empty card desc invs. on gameboard 
             self.desc_mana = ""
             self.desc_health = ""
+            self.desc_counter = ""
+            self.desc_start_end = ""
         else:
             self.desc_mana = f"MP:{self.mana}"
             self.desc_health = f"HP:{self.health}"  
+            self.desc_counter = f"Turns until Activation:{self.end_turn - self.counter}"
+            self.desc_start_end = f"ST/ET: {self.start_turn}/{self.end_turn}"
 
         self.desc_each = ""
-        self.desc_card_damage = ""
-        self.desc_player_damage = "" 
-        self.desc_swap = ""
+        self.desc_repeat_card_damage = ""
+        self.desc_repeat_player_damage = "" 
+        self.desc_repeat_swap = ""
+
+        self.desc_finale = ""
         self.desc_finale_card_damage = ""
-        self.desc_finale_card_target = ""
         self.desc_finale_player_damage = "" 
-        self.desc_swap = ""
-        self.desc_swap_duration = ""
+        self.desc_finale_swap = ""
 
-        # Add each turn if needed
+        # Check if each turn needed 
         if self.start_turn != self.end_turn:
-            self.desc_each += "Each turn"
+            self.desc_each += "Each turn:"
 
-        # Set Card damage info
-        if self.card_damage > 0:
-            if self.card_target == "c":
-                self.desc_card_damage += f"{self.card_damage} dmg to enemy card"
-            elif self.card_target == "a": 
-                self.desc_card_damage += f"{self.card_damage} dmg to all enemy cards"
+        # Set repeat card damage info
+        if self.repeat_card_damage > 0:
+            if self.repeat_card_target == "c":
+                self.desc_repeat_card_damage += f"{self.repeat_card_damage} dmg to enemy card"
+            elif self.repeat_card_target == "a": 
+                self.desc_repeat_card_damage += f"{self.repeat_card_damage} dmg to all enemy cards"
 
-        # Set Player damage info 
-        if self.player_damage:
-            if int(self.player_damage) > 0:
-                self.desc_player_damage += f"{self.player_damage} dmg to enemy player"
+        # Set repeat player damage info 
+        if self.repeat_player_damage > 0:
+            self.desc_repeat_player_damage += f"{self.repeat_player_damage} dmg to enemy player"
 
+        # Set repeat swap info 
+        if self.repeat_swap_duration > 0:
+            if self.repeat_swap_direction == "l":
+                self.desc_repeat_swap += f"Swap Left"
+            else:
+                self.desc_repeat_swap += f"Swap Right"
+
+        # Set finale line 
+        if self.finale_card_damage > 0 or self.finale_player_damage > 0 or self.finale_swap_direction != "n":
+            self.desc_finale += "Finale:"
+        
         # Set Finale card damage 
         if self.finale_card_damage > 0:
             if self.finale_card_target == "c":
-                self.desc_finale_card_damage += f"Fin: {self.finale_card_damage} to enemy card"
+                self.desc_finale_card_damage += f"{self.finale_card_damage} dmg to enemy card"
             elif self.finale_card_target == "a": 
-                self.desc_finale_card_damage += f"Fin: {self.finale_card_damage} dmg to all enemy cards"
+                self.desc_finale_card_damage += f"{self.finale_card_damage} dmg to all enemy cards"
 
-        # Set swap info 
-        if self.swap_duration > 0:
-            if self.swap_direction == "l":
-                self.desc_swap += f"**Swap with left card**"
-                self.desc_swap_duration += f"for {self.swap_duration} more turns"
-            elif self.swap_direction == "r":
-                self.desc_swap += f"**Swap with right card**"
-                self.desc_swap_duration += f"for {self.swap_duration} more turns"
-    
+        # Set Finale player damage 
+        if self.finale_player_damage > 0:
+            self.desc_finale_player_damage += f"{self.finale_player_damage} dmg to enemy player"
+        
+        # Set finale swap info 
+        if self.finale_swap_direction != "n":
+            if self.finale_swap_direction != "l":
+                self.desc_finale_swap += f"Swap Left"
+            else:
+                self.desc_finale_swap += f"Swap Right"
+
     def add_priority(self, round_num, card_priority):
         p = str(round_num) + str(card_priority)
         self.priority = int(p)

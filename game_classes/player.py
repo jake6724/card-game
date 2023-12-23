@@ -143,22 +143,23 @@ class Player:
 
     def display_hand(self):
         print(f"""   
-                {self.name}'s Hand:                   
+                {self.name}'s Hand:        
                 X===================================X   X===================================X   X===================================X   X===================================X
                 |{self.hand.card1.name:^35}|   |{self.hand.card2.name:^35}|   |{self.hand.card3.name:^35}|   |{self.hand.card4.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    
                 |{self.hand.card1.desc_mana:^35}|   |{self.hand.card2.desc_mana:^35}|   |{self.hand.card3.desc_mana:^35}|   |{self.hand.card4.desc_mana:^35}|
-                |{self.hand.card1.desc_health:^35}|   |{self.hand.card2.desc_health:^35}|   |{self.hand.card3.desc_health:^35}|   |{self.hand.card4.desc_health:^35}|         
+                |{self.hand.card1.desc_health:^35}|   |{self.hand.card2.desc_health:^35}|   |{self.hand.card3.desc_health:^35}|   |{self.hand.card4.desc_health:^35}|
+                |{self.hand.card1.desc_start_end:^35}|   |{self.hand.card2.desc_start_end:^35}|   |{self.hand.card3.desc_start_end:^35}|   |{self.hand.card4.desc_start_end:^35}|         
                 |                                   |   |                                   |   |                                   |   |                                   |         
                 |{self.hand.card1.desc_each:^35}|   |{self.hand.card2.desc_each:^35}|   |{self.hand.card3.desc_each:^35}|   |{self.hand.card4.desc_each:^35}|         
-                |{self.hand.card1.desc_card_damage:^35}|   |{self.hand.card2.desc_card_damage:^35}|   |{self.hand.card3.desc_card_damage:^35}|   |{self.hand.card4.desc_card_damage:^35}|         
-                |{self.hand.card1.desc_player_damage:^35}|   |{self.hand.card2.desc_player_damage:^35}|   |{self.hand.card3.desc_player_damage:^35}|   |{self.hand.card4.desc_player_damage:^35}|         
+                |{self.hand.card1.desc_repeat_card_damage:^35}|   |{self.hand.card2.desc_repeat_card_damage:^35}|   |{self.hand.card3.desc_repeat_card_damage:^35}|   |{self.hand.card4.desc_repeat_card_damage:^35}|         
+                |{self.hand.card1.desc_repeat_player_damage:^35}|   |{self.hand.card2.desc_repeat_player_damage:^35}|   |{self.hand.card3.desc_repeat_player_damage:^35}|   |{self.hand.card4.desc_repeat_player_damage:^35}|         
+                |{self.hand.card1.desc_repeat_swap:^35}|   |{self.hand.card2.desc_repeat_swap:^35}|   |{self.hand.card3.desc_repeat_swap:^35}|   |{self.hand.card4.desc_repeat_swap:^35}|         
+                |                                   |   |                                   |   |                                   |   |                                   |         
+                |{self.hand.card1.desc_finale:^35}|   |{self.hand.card2.desc_finale:^35}|   |{self.hand.card3.desc_finale:^35}|   |{self.hand.card4.desc_finale:^35}|         
                 |{self.hand.card1.desc_finale_card_damage:^35}|   |{self.hand.card2.desc_finale_card_damage:^35}|   |{self.hand.card3.desc_finale_card_damage:^35}|   |{self.hand.card4.desc_finale_card_damage:^35}|         
-                |                                   |   |                                   |   |                                   |   |                                   |         
-                |{self.hand.card1.desc_swap:^35}|   |{self.hand.card2.desc_swap:^35}|   |{self.hand.card3.desc_swap:^35}|   |{self.hand.card4.desc_swap:^35}|         
-                |{self.hand.card1.desc_swap_duration:^35}|   |{self.hand.card2.desc_swap_duration:^35}|   |{self.hand.card3.desc_swap_duration:^35}|   |{self.hand.card4.desc_swap_duration:^35}|         
-                |                                   |   |                                   |   |                                   |   |                                   |         
-                |                                   |   |                                   |   |                                   |   |                                   |         
+                |{self.hand.card1.desc_finale_player_damage:^35}|   |{self.hand.card2.desc_finale_player_damage:^35}|   |{self.hand.card3.desc_finale_player_damage:^35}|   |{self.hand.card4.desc_finale_player_damage:^35}|         
+                |{self.hand.card1.desc_finale_swap:^35}|   |{self.hand.card2.desc_finale_swap:^35}|   |{self.hand.card3.desc_finale_swap:^35}|   |{self.hand.card4.desc_finale_swap:^35}|         
                 X===================================X   X===================================X   X===================================X   X===================================X
             """)
    
