@@ -24,24 +24,22 @@ class GameBoard:
 
     def add_to_active_cards(self, card_to_add):
         self.active_card_list.append(card_to_add)
+        print(f"Card added to GB Active cards. New list: {self.active_card_list}")
 
     def get_card_priority(self, card):
         return card.priority
 
     def sort_active_cards(self):
         self.active_card_list.sort(key= self.get_card_priority)
-        print("Log: Cards sorted")
 
     def reset_card_turns(self):
         for card in self.active_card_list:
             card.taken_turn = False 
 
     def run_card_combat_actions(self, card: Card, p1: Player, p2: Player):
-        # Order of operations for attacking 
-        # swap
-        # card damage
-        # player damage 
+        # This function is ONLY responsible for dealing damage to cards and players 
 
+        # Order of operations for attacking: 1. Swap, 2. Card Damage, 3. Player Damage 
         card_target = ""
         card_all_targets = ""
         player_target = None
@@ -56,46 +54,48 @@ class GameBoard:
             card_all_targets = [self.lane1.active_card, self.lane2.active_card, self.lane3.active_card, self.lane4.active_card]
             player_target = p1
 
-        print(f"Card Target: {card_target}")
-        print(f"Card All Targets: {card_all_targets}")
-        print(f"Player Target: {player_target}")
-
         # Determine whether to do repeat or finale moves
         if card.counter == card.end_turn:
-            if card.finale_card_target == "c":
-                card_target.take_damage(card.finale_card_damage) # Deal damage to opponent card based on current cards finale_card_damage 
-            elif card.finale_card_target == "a":
-                for target in card_all_targets:
-                    target.take_damage(card.finale_card_damage) # Deal damage to all opponent cards based on current cards finale_card_damage 
+            if card_target.name != "empty":
+                if card.finale_card_target == "c":
+                    card_target.take_damage(card.finale_card_damage)
+                elif card.finale_card_target == "a":
+                    for target in card_all_targets:
+                        target.take_damage(card.finale_card_damage) 
             
             if card.finale_player_damage > 0:
-                player_target.take_damage(card.finale_player_damage) # Deal damage to player target based on current card finale_player_damage 
+                player_target.take_damage(card.finale_player_damage) 
 
-        elif card.counter >= card.start_turn: # Do repeat moves
-            if card.repeat_card_target == "c":
-                card_target.take_damage(card.repeat_card_damage)
-            elif card.repeat_card_target == "a":
-                for target in card_all_targets:
-                    target.take_damage(card.repeat_card_damage)
+        elif card.counter >= card.start_turn: 
+            if card_target.name != "empty":
+                if card.repeat_card_target == "c":
+                    card_target.take_damage(card.repeat_card_damage)
+                elif card.repeat_card_target == "a":
+                    for target in card_all_targets:
+                        target.take_damage(card.repeat_card_damage)
             
             if card.repeat_player_damage > 0:
                 player_target.take_damage(card.repeat_player_damage)
 
-
     def update(self):
         for card in self.active_card_list:
+            card.create_description()
             if card.health <= 0:
                 self.remove_active_card(card)
 
             if card.counter > card.end_turn: # Possible problem area 
                 self.remove_active_card(card)
 
+        print("GB Updated!")
+
     def remove_active_card(self, card):
         # Reset card's lane to empty
-        lane = self.get_lane_by_number(card.lane)
+        lane = self.get_lane_by_number(card.lane_num)
         self.reset_lane(lane)
+
         # Remove card from active cards list
         self.active_card_list.remove(card)
+
         # Delete the card object?
         # del card 
 
@@ -108,15 +108,16 @@ class GameBoard:
         lane.active_card = self.empty_lane_card
 
     def get_lane_by_number(self, lane_num: int):
-        match lane_num:
-            case 1: return self.lane1
-            case 2: return self.lane2
-            case 3: return self.lane3
-            case 4: return self.lane4
-            case 5: return self.lane5
-            case 6: return self.lane6
-            case 7: return self.lane7
-            case 8: return self.lane8
+        return self.lane_list[(int(lane_num) - 1)]
+        # match lane_num:
+        #     case 1: return self.lane1
+        #     case 2: return self.lane2
+        #     case 3: return self.lane3
+        #     case 4: return self.lane4
+        #     case 5: return self.lane5
+        #     case 6: return self.lane6
+        #     case 7: return self.lane7
+        #     case 8: return self.lane8
     
     def print_active_card_list(self):
         print("Gameboard Active Card List:")

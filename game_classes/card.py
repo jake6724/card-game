@@ -33,13 +33,13 @@ class Card:
         else:
             self.desc_mana = f"MP:{self.mana}"
             self.desc_health = f"HP:{self.health}"  
-            self.desc_counter = f"Turns until Activation:{self.end_turn - self.counter}"
+            self.desc_counter = f"Turns until Finale:{(self.end_turn - self.counter)}"
             self.desc_start_end = f"ST/ET: {self.start_turn}/{self.end_turn}"
 
         self.desc_each = ""
         self.desc_repeat_card_damage = ""
         self.desc_repeat_player_damage = "" 
-        self.desc_repeat_swap = ""
+        self.desc_repeat_swap = "" 
 
         self.desc_finale = ""
         self.desc_finale_card_damage = ""
@@ -93,6 +93,10 @@ class Card:
     def take_damage(self, damage_amount):
         self.health -= damage_amount
 
+    def increase_counter(self):
+        self.counter = self.counter + 1 
+        print(f"{self.name} counter increased to {self.counter}")
+
     def add_priority(self, round_num, card_priority):
         p = str(round_num) + str(card_priority)
         self.priority = int(p)
@@ -104,7 +108,7 @@ class Card:
         self.lane_num = l 
 
     def __str__(self):
-        return f"Card Name: {self.name} - Priority: {self.priority}" 
+        return f"{self.player}:{self.name}" 
         
     def __repr__(self):
-        return f"{self.name}"
+        return f"{self.player}:{self.name}"

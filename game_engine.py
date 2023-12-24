@@ -138,13 +138,11 @@ class Game_engine:
             for card in p1_cards_to_add:
                 self.gb.add_to_active_cards(card)
                 self.gb.add_card_to_lane(card)
-            print("P1 Cards added to GB")
 
         if len(p2_cards_to_add) != 0:
             for card in p2_cards_to_add:
                 self.gb.add_to_active_cards(card)
                 self.gb.add_card_to_lane(card)
-            print("P2 Cards added to GB")
 
     def player_placement_phase(self):
         self.display_game()
@@ -199,31 +197,25 @@ class Game_engine:
         print("Running combat phase")
         # Sort gb.active_card list based on card priority var
         self.gb.sort_active_cards()
-        self.gb.reset_card_turns()
+        print(f"GB active card list at combat time: {self.gb.active_card_list}")
 
         # Main combat loop 
         # Get each card in sorted active cards list 
-        for i in range(len(self.gb.active_card_list)):
-            card = self.gb.active_card_list[i]
-            # Check if card has used its turn yet
-            if card.taken_turn == False:
-                # If not, run its combat actions
-                self.gb.run_card_combat_actions(card, self.player1, self.player2)
-                card.taken_turn = True
+        for i, card in enumerate(self.gb.active_card_list): 
+            print(f"Card doing combat: {card}")
+            # Run its combat actions
+            self.gb.run_card_combat_actions(card, self.player1, self.player2)
+            card.increase_counter()
             
             # Check that current card is not the last card in list (index would go out of range)
             if i != (len(self.gb.active_card_list) - 1):
                 # If next card DOES NOT have same priority, update game board
-                if self.gb.active_card_list[i + 1].priority == card.priority:
+                if self.gb.active_card_list[(i + 1)].priority == card.priority:
                     self.gb.update()
+            else: # If last card you can always update (right?)
+                self.gb.update()
 
-    def fill_out_player_placement_data(self, player1_card_data_list, player2_card_data_list):
-        # Make sure each player placement data pair list is 4 long (All added data will be None)
-        for x in range(4):
-            if len(player1_card_data_list) < 4:
-                player1_card_data_list.append([None, None])
-            if len(player2_card_data_list) < 4:
-                player2_card_data_list.append([None, None])
+        print("Combat phase over")
 
     def add_cards_to_gameboard(self, player1_card_data_list, player2_card_data_list):
         # Add cards to gameboard 
