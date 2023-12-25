@@ -21,6 +21,13 @@ class Card:
         self.taken_turn = False
         self.counter = 0 
 
+        self.log_repeat_card = ""
+        self.log_repeat_player = ""
+        self.log_repeat_swap = ""
+        self.log_finale_card = ""
+        self.log_finale_player = ""
+        self.log_finale_swap = ""
+
         self.create_description()
 
     def create_description(self):                                         
@@ -90,6 +97,14 @@ class Card:
             else:
                 self.desc_finale_swap += f"Swap Right"
 
+    # def create_combat_log(self):
+    #     self.log_repeat_card = ""
+    #     self.log_repeat_player = ""
+    #     self.log_repeat_swap = ""
+    #     self.log_finale_card = ""
+    #     self.log_finale_player = ""
+    #     self.log_finale_swap = ""
+
     def take_damage(self, damage_amount):
         self.health -= damage_amount
 
@@ -111,4 +126,4 @@ class Card:
         return f"{self.player}:{self.name}" 
         
     def __repr__(self):
-        return f"{self.player}:{self.name}"
+        return f"{self.player}:{self.name}:{self.priority}"

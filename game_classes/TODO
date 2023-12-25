@@ -1,7 +1,10 @@
-Add player to card
+Check card counter logic 
+
+Possible bug with archer or p2 cards?
+
+0/0 cards like thief are not staying on board long enough to see 
+
+Check if top card exists in deck.get_top_card
 
 fix screen sizing issue 
 
-Select card by number (or maybe number or name?)
-
-Update internal card counter once its on the board 

@@ -21,6 +21,8 @@ class GameBoard:
         self.lane8 = self.lane_list[7]
 
         self.active_card_list = []
+        self.combat_data = [["", "", "", "", "", ""], ["", "", "", "", "", ""], ["", "", "", "", "", ""], 
+                            ["", "", "", "", "", ""], ["", "", "", "", "", ""], ["", "", "", "", "", ""]]
 
     def add_to_active_cards(self, card_to_add):
         self.active_card_list.append(card_to_add)
@@ -59,29 +61,46 @@ class GameBoard:
             if card_target.name != "empty":
                 if card.finale_card_target == "c":
                     card_target.take_damage(card.finale_card_damage)
+                    card.log_finale_card = f"{card.name} dealt {card.finale_card_damage} dmg to {card_target.name}"
                 elif card.finale_card_target == "a":
                     for target in card_all_targets:
                         target.take_damage(card.finale_card_damage) 
+                    card.log_finale_card = f"{card.name} dealt {card.finale_card_damage} dmg to all enemy cards"
             
             if card.finale_player_damage > 0:
                 player_target.take_damage(card.finale_player_damage) 
+                card.log_finale_player = f"{card.name} dealt {card.finale_player_damage} dmg to {player_target.name}"
 
         elif card.counter >= card.start_turn: 
             if card_target.name != "empty":
                 if card.repeat_card_target == "c":
                     card_target.take_damage(card.repeat_card_damage)
+                    card.log_repeat_card = f"{card.name} dealt {card.repeat_card_damage} dmg to {card_target.name}"
                 elif card.repeat_card_target == "a":
                     for target in card_all_targets:
                         target.take_damage(card.repeat_card_damage)
+                    card.log_repeat_card = f"{card.name} dealt {card.repeat_card_damage} dmg to all enemy cards"
             
             if card.repeat_player_damage > 0:
                 player_target.take_damage(card.repeat_player_damage)
+                card.log_repeat_player = f"{card.name} dealt {card.repeat_player_damage} dmg to {player_target.name}"
+
+    def create_combat_log(self):
+        # Add data from all active cards 
+        for i, card in enumerate(self.active_card_list):
+            self.combat_data[i] = [card.log_repeat_swap, card.log_repeat_card, card.log_repeat_player,
+                                    card.log_finale_swap, card.log_finale_card, card.log_finale_player]
+            
+        # Fill in blank data until combat data list is filled
+        while len(self.combat_data) != 8:
+            self.combat_data.append(["", "", "", "", "", ""])
 
     def update(self):
         for card in self.active_card_list:
             card.create_description()
             if card.health <= 0:
                 self.remove_active_card(card)
+                continue # Don't check the next if it already been removed 
 
             if card.counter > card.end_turn: # Possible problem area 
                 self.remove_active_card(card)
@@ -128,9 +147,9 @@ class GameBoard:
     def display_gameboard(self): 
         # TODO: Somehow it cant display card data only when the lane is empty............
         print(f"""   
-                X===================================X   X===================================X   X===================================X   X===================================X
-                |{self.lane5.active_card.name:^35}|   |{self.lane6.active_card.name:^35}|   |{self.lane7.active_card.name:^35}|   |{self.lane8.active_card.name:^35}|
-                |                                   |   |                                   |   |                                   |   |                                   |    
+                X===================================X   X===================================X   X===================================X   X===================================X                        Combat Log
+                |{self.lane5.active_card.name:^35}|   |{self.lane6.active_card.name:^35}|   |{self.lane7.active_card.name:^35}|   |{self.lane8.active_card.name:^35}|                        {self.combat_data[0][0]}
+                |                                   |   |                                   |   |                                   |   |                                   |                            
                 |{self.lane5.active_card.desc_mana:^35}|   |{self.lane6.active_card.desc_mana:^35}|   |{self.lane7.active_card.desc_mana:^35}|   |{self.lane8.active_card.desc_mana:^35}|
                 |{self.lane5.active_card.desc_health:^35}|   |{self.lane6.active_card.desc_health:^35}|   |{self.lane7.active_card.desc_health:^35}|   |{self.lane8.active_card.desc_health:^35}|
                 |{self.lane5.active_card.desc_counter:^35}|   |{self.lane6.active_card.desc_counter:^35}|   |{self.lane7.active_card.desc_counter:^35}|   |{self.lane8.active_card.desc_counter:^35}|         
