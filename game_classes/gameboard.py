@@ -98,36 +98,32 @@ class GameBoard:
         #         card.log_player = f"{card.name} dealt {card.repeat_player_damage} dmg to {player_target.name}"
 
     def run_finale_combat(self, card:Card, card_target: Card, card_all_targets: list[Card], player_target: Player):
-        if card.counter == card.end_turn:
-            if card_target.name != "empty":
-                print(f"{card} doing finale damage!")
-                if card.finale_card_target == "c":
-                    card_target.take_damage(card.finale_card_damage)
-                    card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to {card_target.name}"
-                elif card.finale_card_target == "a":
-                    for target in card_all_targets:
-                        target.take_damage(card.finale_card_damage) 
-                    card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to all enemy cards"
+        if card.finale_card_target == "c":
+            print(f"{card} dealing {card.repeat_card_damage} to {card_target}")
+            card_target.take_damage(card.finale_card_damage)
+            card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to {card_target.name}"
+        elif card.finale_card_target == "a":
+            for target in card_all_targets:
+                target.take_damage(card.finale_card_damage)
+            card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to all enemy cards"
             
-            if card.finale_player_damage > 0:
-                player_target.take_damage(card.finale_player_damage) 
-                card.log_player = f"{card.name} dealt {card.finale_player_damage} finale dmg to {player_target.name}"
+        if card.finale_player_damage > 0:
+            player_target.take_damage(card.finale_player_damage) 
+            card.log_player = f"{card.name} dealt {card.finale_player_damage} finale dmg to {player_target.name}"
 
     def run_repeat_combat(self, card:Card, card_target: Card, card_all_targets: list[Card], player_target: Player):
-        if card.counter == card.end_turn:
-            if card_target.name != "empty":
-                print(f"{card} doing finale damage!")
-                if card.finale_card_target == "c":
-                    card_target.take_damage(card.finale_card_damage)
-                    card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to {card_target.name}"
-                elif card.finale_card_target == "a":
-                    for target in card_all_targets:
-                        target.take_damage(card.finale_card_damage) 
-                    card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to all enemy cards"
+        if card.repeat_card_target == "c":
+            card_target.take_damage(card.repeat_card_damage)
+            card.log_card = f"{card.name} dealt {card.repeat_card_damage} dmg to {card_target.name}"
+
+        elif card.repeat_card_target == "a":
+            for target in card_all_targets:
+                target.take_damage(card.repeat_card_damage)
+            card.log_card = f"{card.name} dealt {card.repeat_card_damage} dmg to all enemy cards"
             
-            if card.finale_player_damage > 0:
-                player_target.take_damage(card.finale_player_damage) 
-                card.log_player = f"{card.name} dealt {card.finale_player_damage} finale dmg to {player_target.name}"
+        if card.repeat_player_damage > 0:
+                player_target.take_damage(card.repeat_player_damage)
+                card.log_player = f"{card.name} dealt {card.repeat_player_damage} dmg to {player_target.name}"
 
 
     def create_combat_log(self):

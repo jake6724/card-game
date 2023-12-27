@@ -103,6 +103,7 @@ class Card:
     #     self.log_finale_swap = ""
 
     def take_damage(self, damage_amount):
+        print(f"{self}: I took {damage_amount} dmg")
         self.health -= damage_amount
 
     def increase_counter(self):
