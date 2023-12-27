@@ -148,7 +148,8 @@ class Player:
             return True 
 
     def display_hand(self):
-        print(f"""                 ( 1 )                                     ( 2 )                                     ( 3 )                                     ( 4 )
+        print(f"""                 
+                ( 1 )                                   ( 2 )                                   ( 3 )                                   ( 4 )
                 X===================================X   X===================================X   X===================================X   X===================================X
                 |{self.hand.card1.name:^35}|   |{self.hand.card2.name:^35}|   |{self.hand.card3.name:^35}|   |{self.hand.card4.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    

@@ -20,10 +20,14 @@ class Hand():
 
     def remove_card_from_hand(self, card_to_remove: Card):
         # Find and remove card. Add an empty card back to the end of the card list to replace
-        for card in self.card_list:
+
+        # Replace card to remove with empty card. Empty cards are filtered out 
+        # and new cards are added at start of each placement phase 
+        for i, card in enumerate(self.card_list):
             if card == card_to_remove:
-                self.card_list.remove(card)
-                self.add_card_to_hand(self.empty_card)
+                # self.card_list.remove(card)
+                # self.add_card_to_hand(self.empty_card)
+                self.card_list[i] = self.empty_card
         self.create_card_vars()
     
     def create_card_vars(self):
