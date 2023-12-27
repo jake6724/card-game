@@ -151,10 +151,11 @@ class Game_engine:
         cards_to_add = []
         option = ""
 
-        option = input("Enter card or (e)nd turn:")
+        # option = input("Enter card or (e)nd turn:")
+        option = input("Enter card or ENTER to end turn:")
 
         # Get current player card placements 
-        while option != "e":
+        while option != "":
             # if self.current_player.is_card_in_hand(option):
             if option in card_options:
                 card = self.current_player.get_card_by_number(option)
@@ -192,7 +193,8 @@ class Game_engine:
                 # print("You don't have this card!")
                 print("Invalid card number!")
             
-            option = input("Enter card or (e)nd turn:")
+            # option = input("Enter card or (e)nd turn:")
+            option = input("Enter card or ENTER to end turn:")
 
         return cards_to_add
 

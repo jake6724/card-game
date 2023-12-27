@@ -5,7 +5,7 @@ import random
 
 # TODO: Create a simple logger that logs important points in the game loop and says where it was done
 
-G = Game_engine("card_data_sets/card_data4.txt")
+G = Game_engine("card_data_sets/card_data5.txt")
 
 G.run_setup()
 G.run_game_loop()
