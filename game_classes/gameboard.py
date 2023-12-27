@@ -21,8 +21,11 @@ class GameBoard:
         self.lane8 = self.lane_list[7]
 
         self.active_card_list = []
-        self.combat_data = [["", "", "", "", "", ""], ["", "", "", "", "", ""], ["", "", "", "", "", ""], 
-                            ["", "", "", "", "", ""], ["", "", "", "", "", ""], ["", "", "", "", "", ""]]
+        self.cards_to_remove = []
+        self.combat_data = [["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""],
+                            ["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""]]
+        
+        self.create_combat_log()
 
     def add_to_active_cards(self, card_to_add):
         self.active_card_list.append(card_to_add)
@@ -39,8 +42,9 @@ class GameBoard:
             card.taken_turn = False 
 
     def run_card_combat_actions(self, card: Card, p1: Player, p2: Player):
-        # This function is ONLY responsible for dealing damage to cards and players 
-
+        # Check if card name is empty and if so don't waste time doing the rest  
+        if card.name == "empty":
+            return 
         # Order of operations for attacking: 1. Swap, 2. Card Damage, 3. Player Damage 
         card_target = ""
         card_all_targets = ""
@@ -59,20 +63,22 @@ class GameBoard:
         # Determine whether to do repeat or finale moves
         if card.counter == card.end_turn:
             if card_target.name != "empty":
+                print(f"{card} doing finale damage!")
                 if card.finale_card_target == "c":
                     card_target.take_damage(card.finale_card_damage)
-                    card.log_finale_card = f"{card.name} dealt {card.finale_card_damage} dmg to {card_target.name}"
+                    card.log_finale_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to {card_target.name}"
                 elif card.finale_card_target == "a":
                     for target in card_all_targets:
                         target.take_damage(card.finale_card_damage) 
-                    card.log_finale_card = f"{card.name} dealt {card.finale_card_damage} dmg to all enemy cards"
+                    card.log_finale_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to all enemy cards"
             
             if card.finale_player_damage > 0:
                 player_target.take_damage(card.finale_player_damage) 
-                card.log_finale_player = f"{card.name} dealt {card.finale_player_damage} dmg to {player_target.name}"
+                card.log_finale_player = f"{card.name} dealt {card.finale_player_damage} finale dmg to {player_target.name}"
 
         elif card.counter >= card.start_turn: 
             if card_target.name != "empty":
+                print(f"{card} doing repeat damage!")
                 if card.repeat_card_target == "c":
                     card_target.take_damage(card.repeat_card_damage)
                     card.log_repeat_card = f"{card.name} dealt {card.repeat_card_damage} dmg to {card_target.name}"
@@ -88,21 +94,37 @@ class GameBoard:
     def create_combat_log(self):
         # Add data from all active cards 
         for i, card in enumerate(self.active_card_list):
-            self.combat_data[i] = [card.log_repeat_swap, card.log_repeat_card, card.log_repeat_player,
-                                    card.log_finale_swap, card.log_finale_card, card.log_finale_player]
-            
+            # Decide whether to put finale or repeat data
+            if card.counter == card.end_turn:
+                self.combat_data[i] = [card.log_finale_swap, card.log_finale_card, card.log_finale_player]
+                
+            elif card.counter >= card.start_turn:
+                self.combat_data[i] = [card.log_repeat_swap, card.log_repeat_card, card.log_repeat_player]
         # Fill in blank data until combat data list is filled
         while len(self.combat_data) != 8:
-            self.combat_data.append(["", "", "", "", "", ""])
+            self.combat_data.append(["", "", ""])
+
+        print(f"Combat data: {self.combat_data}")
+
+    def reset_combat_log(self):
+        self.combat_data = [["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""],
+                            ["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""]]
+        print("Combat log reset")
 
     def update(self):
-        for card in self.active_card_list:
+        print("Running Update")
+        self.create_combat_log()
+
+        for i, card in enumerate(self.active_card_list[:]): # MUST USE COPY OF LIST WHEN REMOVING ITEMS OR WILL SKIP ITEMS (what the [:] helps with)
+            print(f"Active card list at update time: {self.active_card_list}")
+            print(f"Current card: {card}")
             card.create_description()
             if card.health <= 0:
                 self.remove_active_card(card)
-                continue # Don't check the next if it already been removed 
-
-            if card.counter > card.end_turn: # Possible problem area 
+                print(f"Card health too low, removing {card}")
+            
+            elif card.counter > card.end_turn: # Possible problem area 
+                print(f"Counter:{card.counter} higher than end turn: {card.end_turn}, removing {card}")
                 self.remove_active_card(card)
 
         print("GB Updated!")
@@ -112,11 +134,8 @@ class GameBoard:
         lane = self.get_lane_by_number(card.lane_num)
         self.reset_lane(lane)
 
-        # Remove card from active cards list
+        # Delete card from memory 
         self.active_card_list.remove(card)
-
-        # Delete the card object?
-        # del card 
 
     def add_card_to_lane(self, new_card: Card):
         for lane in self.lane_list:
@@ -148,37 +167,37 @@ class GameBoard:
         # TODO: Somehow it cant display card data only when the lane is empty............
         print(f"""   
                 X===================================X   X===================================X   X===================================X   X===================================X                        Combat Log
-                |{self.lane5.active_card.name:^35}|   |{self.lane6.active_card.name:^35}|   |{self.lane7.active_card.name:^35}|   |{self.lane8.active_card.name:^35}|                        {self.combat_data[0][0]}
-                |                                   |   |                                   |   |                                   |   |                                   |                            
-                |{self.lane5.active_card.desc_mana:^35}|   |{self.lane6.active_card.desc_mana:^35}|   |{self.lane7.active_card.desc_mana:^35}|   |{self.lane8.active_card.desc_mana:^35}|
+                |{self.lane5.active_card.name:^35}|   |{self.lane6.active_card.name:^35}|   |{self.lane7.active_card.name:^35}|   |{self.lane8.active_card.name:^35}|            {self.combat_data[0][0]}
+                |                                   |   |                                   |   |                                   |   |                                   |            {self.combat_data[0][1]}
+                |{self.lane5.active_card.desc_mana:^35}|   |{self.lane6.active_card.desc_mana:^35}|   |{self.lane7.active_card.desc_mana:^35}|   |{self.lane8.active_card.desc_mana:^35}|            {self.combat_data[0][2]}
                 |{self.lane5.active_card.desc_health:^35}|   |{self.lane6.active_card.desc_health:^35}|   |{self.lane7.active_card.desc_health:^35}|   |{self.lane8.active_card.desc_health:^35}|
-                |{self.lane5.active_card.desc_counter:^35}|   |{self.lane6.active_card.desc_counter:^35}|   |{self.lane7.active_card.desc_counter:^35}|   |{self.lane8.active_card.desc_counter:^35}|         
-                |                                   |   |                                   |   |                                   |   |                                   |         
-                |{self.lane5.active_card.desc_each:^35}|   |{self.lane6.active_card.desc_each:^35}|   |{self.lane7.active_card.desc_each:^35}|   |{self.lane8.active_card.desc_each:^35}|         
-                |{self.lane5.active_card.desc_repeat_card_damage:^35}|   |{self.lane6.active_card.desc_repeat_card_damage:^35}|   |{self.lane7.active_card.desc_repeat_card_damage:^35}|   |{self.lane8.active_card.desc_repeat_card_damage:^35}|         
-                |{self.lane5.active_card.desc_repeat_player_damage:^35}|   |{self.lane6.active_card.desc_repeat_player_damage:^35}|   |{self.lane7.active_card.desc_repeat_player_damage:^35}|   |{self.lane8.active_card.desc_repeat_player_damage:^35}|         
-                |{self.lane5.active_card.desc_repeat_swap:^35}|   |{self.lane6.active_card.desc_repeat_swap:^35}|   |{self.lane7.active_card.desc_repeat_swap:^35}|   |{self.lane8.active_card.desc_repeat_swap:^35}|         
-                |                                   |   |                                   |   |                                   |   |                                   |         
-                |{self.lane5.active_card.desc_finale:^35}|   |{self.lane6.active_card.desc_finale:^35}|   |{self.lane7.active_card.desc_finale:^35}|   |{self.lane8.active_card.desc_finale:^35}|         
-                |{self.lane5.active_card.desc_finale_card_damage:^35}|   |{self.lane6.active_card.desc_finale_card_damage:^35}|   |{self.lane7.active_card.desc_finale_card_damage:^35}|   |{self.lane8.active_card.desc_finale_card_damage:^35}|         
-                |{self.lane5.active_card.desc_finale_player_damage:^35}|   |{self.lane6.active_card.desc_finale_player_damage:^35}|   |{self.lane7.active_card.desc_finale_player_damage:^35}|   |{self.lane8.active_card.desc_finale_player_damage:^35}|         
-                |{self.lane5.active_card.desc_finale_swap:^35}|   |{self.lane6.active_card.desc_finale_swap:^35}|   |{self.lane7.active_card.desc_finale_swap:^35}|   |{self.lane8.active_card.desc_finale_swap:^35}|         
+                |{self.lane5.active_card.desc_counter:^35}|   |{self.lane6.active_card.desc_counter:^35}|   |{self.lane7.active_card.desc_counter:^35}|   |{self.lane8.active_card.desc_counter:^35}|            {self.combat_data[1][0]}
+                |                                   |   |                                   |   |                                   |   |                                   |            {self.combat_data[1][1]}
+                |{self.lane5.active_card.desc_each:^35}|   |{self.lane6.active_card.desc_each:^35}|   |{self.lane7.active_card.desc_each:^35}|   |{self.lane8.active_card.desc_each:^35}|            {self.combat_data[1][2]}
+                |{self.lane5.active_card.desc_repeat_card_damage:^35}|   |{self.lane6.active_card.desc_repeat_card_damage:^35}|   |{self.lane7.active_card.desc_repeat_card_damage:^35}|   |{self.lane8.active_card.desc_repeat_card_damage:^35}|
+                |{self.lane5.active_card.desc_repeat_player_damage:^35}|   |{self.lane6.active_card.desc_repeat_player_damage:^35}|   |{self.lane7.active_card.desc_repeat_player_damage:^35}|   |{self.lane8.active_card.desc_repeat_player_damage:^35}|            {self.combat_data[2][0]}
+                |{self.lane5.active_card.desc_repeat_swap:^35}|   |{self.lane6.active_card.desc_repeat_swap:^35}|   |{self.lane7.active_card.desc_repeat_swap:^35}|   |{self.lane8.active_card.desc_repeat_swap:^35}|            {self.combat_data[2][1]}
+                |                                   |   |                                   |   |                                   |   |                                   |            {self.combat_data[2][2]}
+                |{self.lane5.active_card.desc_finale:^35}|   |{self.lane6.active_card.desc_finale:^35}|   |{self.lane7.active_card.desc_finale:^35}|   |{self.lane8.active_card.desc_finale:^35}|
+                |{self.lane5.active_card.desc_finale_card_damage:^35}|   |{self.lane6.active_card.desc_finale_card_damage:^35}|   |{self.lane7.active_card.desc_finale_card_damage:^35}|   |{self.lane8.active_card.desc_finale_card_damage:^35}|            {self.combat_data[3][0]}
+                |{self.lane5.active_card.desc_finale_player_damage:^35}|   |{self.lane6.active_card.desc_finale_player_damage:^35}|   |{self.lane7.active_card.desc_finale_player_damage:^35}|   |{self.lane8.active_card.desc_finale_player_damage:^35}|            {self.combat_data[3][1]}
+                |{self.lane5.active_card.desc_finale_swap:^35}|   |{self.lane6.active_card.desc_finale_swap:^35}|   |{self.lane7.active_card.desc_finale_swap:^35}|   |{self.lane8.active_card.desc_finale_swap:^35}|            {self.combat_data[3][2]}
                 X===================================X   X===================================X   X===================================X   X===================================X
-                                Lane 5                                  Lane 6                                  Lane 7                                Lane 8               
-                =============================================================================================================================================================
-                                Lane 1                                  Lane 2                                  Lane 3                                Lane 4               
+                                Lane 5                                  Lane 6                                  Lane 7                                Lane 8                             {self.combat_data[4][0]}
+                =============================================================================================================================================================            {self.combat_data[4][1]}
+                                Lane 1                                  Lane 2                                  Lane 3                                Lane 4                             {self.combat_data[4][2]}
                 X===================================X   X===================================X   X===================================X   X===================================X
-                |{self.lane1.active_card.name:^35}|   |{self.lane2.active_card.name:^35}|   |{self.lane3.active_card.name:^35}|   |{self.lane4.active_card.name:^35}|
-                |                                   |   |                                   |   |                                   |   |                                   |    
-                |{self.lane1.active_card.desc_mana:^35}|   |{self.lane2.active_card.desc_mana:^35}|   |{self.lane3.active_card.desc_mana:^35}|   |{self.lane4.active_card.desc_mana:^35}|
-                |{self.lane1.active_card.desc_health:^35}|   |{self.lane2.active_card.desc_health:^35}|   |{self.lane3.active_card.desc_health:^35}|   |{self.lane4.active_card.desc_health:^35}|   
-                |{self.lane1.active_card.desc_counter:^35}|   |{self.lane2.active_card.desc_counter:^35}|   |{self.lane3.active_card.desc_counter:^35}|   |{self.lane4.active_card.desc_counter:^35}|      
-                |                                   |   |                                   |   |                                   |   |                                   |         
-                |{self.lane1.active_card.desc_each:^35}|   |{self.lane2.active_card.desc_each:^35}|   |{self.lane3.active_card.desc_each:^35}|   |{self.lane4.active_card.desc_each:^35}|         
+                |{self.lane1.active_card.name:^35}|   |{self.lane2.active_card.name:^35}|   |{self.lane3.active_card.name:^35}|   |{self.lane4.active_card.name:^35}|            {self.combat_data[5][0]}
+                |                                   |   |                                   |   |                                   |   |                                   |            {self.combat_data[5][1]}
+                |{self.lane1.active_card.desc_mana:^35}|   |{self.lane2.active_card.desc_mana:^35}|   |{self.lane3.active_card.desc_mana:^35}|   |{self.lane4.active_card.desc_mana:^35}|            {self.combat_data[5][2]}
+                |{self.lane1.active_card.desc_health:^35}|   |{self.lane2.active_card.desc_health:^35}|   |{self.lane3.active_card.desc_health:^35}|   |{self.lane4.active_card.desc_health:^35}|               
+                |{self.lane1.active_card.desc_counter:^35}|   |{self.lane2.active_card.desc_counter:^35}|   |{self.lane3.active_card.desc_counter:^35}|   |{self.lane4.active_card.desc_counter:^35}|            {self.combat_data[6][0]}
+                |                                   |   |                                   |   |                                   |   |                                   |            {self.combat_data[6][1]}
+                |{self.lane1.active_card.desc_each:^35}|   |{self.lane2.active_card.desc_each:^35}|   |{self.lane3.active_card.desc_each:^35}|   |{self.lane4.active_card.desc_each:^35}|            {self.combat_data[6][2]}
                 |{self.lane1.active_card.desc_repeat_card_damage:^35}|   |{self.lane2.active_card.desc_repeat_card_damage:^35}|   |{self.lane3.active_card.desc_repeat_card_damage:^35}|   |{self.lane4.active_card.desc_repeat_card_damage:^35}|         
-                |{self.lane1.active_card.desc_repeat_player_damage:^35}|   |{self.lane2.active_card.desc_repeat_player_damage:^35}|   |{self.lane3.active_card.desc_repeat_player_damage:^35}|   |{self.lane4.active_card.desc_repeat_player_damage:^35}|         
-                |{self.lane1.active_card.desc_repeat_swap:^35}|   |{self.lane2.active_card.desc_repeat_swap:^35}|   |{self.lane3.active_card.desc_repeat_swap:^35}|   |{self.lane4.active_card.desc_repeat_swap:^35}|         
-                |                                   |   |                                   |   |                                   |   |                                   |         
+                |{self.lane1.active_card.desc_repeat_player_damage:^35}|   |{self.lane2.active_card.desc_repeat_player_damage:^35}|   |{self.lane3.active_card.desc_repeat_player_damage:^35}|   |{self.lane4.active_card.desc_repeat_player_damage:^35}|            {self.combat_data[7][0]}
+                |{self.lane1.active_card.desc_repeat_swap:^35}|   |{self.lane2.active_card.desc_repeat_swap:^35}|   |{self.lane3.active_card.desc_repeat_swap:^35}|   |{self.lane4.active_card.desc_repeat_swap:^35}|            {self.combat_data[7][1]}
+                |                                   |   |                                   |   |                                   |   |                                   |            {self.combat_data[7][2]}
                 |{self.lane1.active_card.desc_finale:^35}|   |{self.lane2.active_card.desc_finale:^35}|   |{self.lane3.active_card.desc_finale:^35}|   |{self.lane4.active_card.desc_finale:^35}|         
                 |{self.lane1.active_card.desc_finale_card_damage:^35}|   |{self.lane2.active_card.desc_finale_card_damage:^35}|   |{self.lane3.active_card.desc_finale_card_damage:^35}|   |{self.lane4.active_card.desc_finale_card_damage:^35}|         
                 |{self.lane1.active_card.desc_finale_player_damage:^35}|   |{self.lane2.active_card.desc_finale_player_damage:^35}|   |{self.lane3.active_card.desc_finale_player_damage:^35}|   |{self.lane4.active_card.desc_finale_player_damage:^35}|         

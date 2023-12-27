@@ -197,6 +197,9 @@ class Game_engine:
         print("Running combat phase")
         # Sort gb.active_card list based on card priority var
         self.gb.sort_active_cards()
+
+        # Reset combat log 
+        self.gb.reset_combat_log()
         print(f"GB active card list at combat time: {self.gb.active_card_list}")
 
         # Main combat loop 
@@ -210,7 +213,7 @@ class Game_engine:
             # Check that current card is not the last card in list (index would go out of range)
             if i != (len(self.gb.active_card_list) - 1):
                 # If next card DOES NOT have same priority, update game board
-                if self.gb.active_card_list[(i + 1)].priority == card.priority:
+                if self.gb.active_card_list[(i + 1)].priority != card.priority:
                     self.gb.update()
             else: # If last card you can always update (right?)
                 self.gb.update()
