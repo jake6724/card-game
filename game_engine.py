@@ -146,7 +146,7 @@ class Game_engine:
 
     def player_placement_phase(self):
         self.display_game()
-        # card_priorities = ["1", "2", "3", "4"]
+        card_options = ["1", "2", "3", "4"]
         card_priority_counter = 1
         cards_to_add = []
         option = ""
@@ -155,8 +155,10 @@ class Game_engine:
 
         # Get current player card placements 
         while option != "e":
-            if self.current_player.is_card_in_hand(option):
-                card = self.current_player.get_card_by_name(option)
+            # if self.current_player.is_card_in_hand(option):
+            if option in card_options:
+                card = self.current_player.get_card_by_number(option)
+                print(f"Selected Card: {card}")
                 if self.current_player.has_enough_mana(card):
                     lane_option = input(f"Enter lane ({self.current_player.get_lane_list_string()}):")
                     if self.current_player.is_lane_valid(lane_option):
@@ -187,7 +189,8 @@ class Game_engine:
                 else:
                     print("Not enough mana!")
             else:
-                print("You don't have this card!")
+                # print("You don't have this card!")
+                print("Invalid card number!")
             
             option = input("Enter card or (e)nd turn:")
 
@@ -215,7 +218,7 @@ class Game_engine:
                 # If next card DOES NOT have same priority, update game board
                 if self.gb.active_card_list[(i + 1)].priority != card.priority:
                     self.gb.update()
-            else: # If last card you can always update (right?)
+            else: # Update if last card in the list (Also ensures board is always updated atleast once after a combat round)
                 self.gb.update()
 
         print("Combat phase over")

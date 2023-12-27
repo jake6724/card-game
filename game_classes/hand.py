@@ -37,6 +37,9 @@ class Hand():
         for card in self.card_list:
             if card.name == card_name:
                 return card
+            
+    def get_card_by_number(self, card_num):
+        return self.card_list[(int(card_num) - 1)]
 
     def print_card_list(self):
         for card in self.card_list:

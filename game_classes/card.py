@@ -21,12 +21,9 @@ class Card:
         self.taken_turn = False
         self.counter = 0 
 
-        self.log_repeat_card = ""
-        self.log_repeat_player = ""
-        self.log_repeat_swap = ""
-        self.log_finale_card = ""
-        self.log_finale_player = ""
-        self.log_finale_swap = ""
+        self.log_swap = ""
+        self.log_card = ""
+        self.log_player = ""
 
         self.create_description()
 

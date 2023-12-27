@@ -35,7 +35,7 @@ class GameBoard:
         return card.priority
 
     def sort_active_cards(self):
-        self.active_card_list.sort(key= self.get_card_priority)
+        self.active_card_list.sort(key= self.get_card_priority, reverse= True)
 
     def reset_card_turns(self):
         for card in self.active_card_list:
@@ -59,47 +59,42 @@ class GameBoard:
             card_target = self.get_lane_by_number(int(card.lane_num) - 4).active_card
             card_all_targets = [self.lane1.active_card, self.lane2.active_card, self.lane3.active_card, self.lane4.active_card]
             player_target = p1
-
-        # Determine whether to do repeat or finale moves
+            
         if card.counter == card.end_turn:
             if card_target.name != "empty":
                 print(f"{card} doing finale damage!")
                 if card.finale_card_target == "c":
                     card_target.take_damage(card.finale_card_damage)
-                    card.log_finale_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to {card_target.name}"
+                    card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to {card_target.name}"
                 elif card.finale_card_target == "a":
                     for target in card_all_targets:
                         target.take_damage(card.finale_card_damage) 
-                    card.log_finale_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to all enemy cards"
+                    card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to all enemy cards"
             
             if card.finale_player_damage > 0:
                 player_target.take_damage(card.finale_player_damage) 
-                card.log_finale_player = f"{card.name} dealt {card.finale_player_damage} finale dmg to {player_target.name}"
+                card.log_player = f"{card.name} dealt {card.finale_player_damage} finale dmg to {player_target.name}"
 
         elif card.counter >= card.start_turn: 
             if card_target.name != "empty":
                 print(f"{card} doing repeat damage!")
                 if card.repeat_card_target == "c":
                     card_target.take_damage(card.repeat_card_damage)
-                    card.log_repeat_card = f"{card.name} dealt {card.repeat_card_damage} dmg to {card_target.name}"
+                    card.log_card = f"{card.name} dealt {card.repeat_card_damage} dmg to {card_target.name}"
                 elif card.repeat_card_target == "a":
                     for target in card_all_targets:
                         target.take_damage(card.repeat_card_damage)
-                    card.log_repeat_card = f"{card.name} dealt {card.repeat_card_damage} dmg to all enemy cards"
+                    card.log_card = f"{card.name} dealt {card.repeat_card_damage} dmg to all enemy cards"
             
             if card.repeat_player_damage > 0:
                 player_target.take_damage(card.repeat_player_damage)
-                card.log_repeat_player = f"{card.name} dealt {card.repeat_player_damage} dmg to {player_target.name}"
+                card.log_player = f"{card.name} dealt {card.repeat_player_damage} dmg to {player_target.name}"
 
     def create_combat_log(self):
         # Add data from all active cards 
         for i, card in enumerate(self.active_card_list):
-            # Decide whether to put finale or repeat data
-            if card.counter == card.end_turn:
-                self.combat_data[i] = [card.log_finale_swap, card.log_finale_card, card.log_finale_player]
-                
-            elif card.counter >= card.start_turn:
-                self.combat_data[i] = [card.log_repeat_swap, card.log_repeat_card, card.log_repeat_player]
+            self.combat_data[i] = [card.log_swap, card.log_card, card.log_player]
+
         # Fill in blank data until combat data list is filled
         while len(self.combat_data) != 8:
             self.combat_data.append(["", "", ""])
@@ -164,7 +159,6 @@ class GameBoard:
         time.sleep(2)
 
     def display_gameboard(self): 
-        # TODO: Somehow it cant display card data only when the lane is empty............
         print(f"""   
                 X===================================X   X===================================X   X===================================X   X===================================X                        Combat Log
                 |{self.lane5.active_card.name:^35}|   |{self.lane6.active_card.name:^35}|   |{self.lane7.active_card.name:^35}|   |{self.lane8.active_card.name:^35}|            {self.combat_data[0][0]}

@@ -112,6 +112,9 @@ class Player:
         # Input validation handled in Hand class
         return self.hand.get_card_by_name(card_name)
         
+    def get_card_by_number(self, card_num):
+        return self.hand.get_card_by_number(card_num)
+    
     def get_valid_lane_number(self):
         # Get a valid lane number for current player to use in card placement  
         is_lane_valid = False 
@@ -145,7 +148,7 @@ class Player:
             return True 
 
     def display_hand(self):
-        print(f"""   
+        print(f"""                 ( 1 )                                     ( 2 )                                     ( 3 )                                     ( 4 )
                 X===================================X   X===================================X   X===================================X   X===================================X
                 |{self.hand.card1.name:^35}|   |{self.hand.card2.name:^35}|   |{self.hand.card3.name:^35}|   |{self.hand.card4.name:^35}|
                 |                                   |   |                                   |   |                                   |   |                                   |    
