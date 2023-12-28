@@ -279,7 +279,12 @@ class Game_engine:
         self.gb.display_gameboard()
 
     def display_round_info(self):
-        print(f"Round Number: {self.round}      Mana Per Turn: {self.mana_per_turn}")
+        if self.current_player == self.player1:
+            opponent = self.player2
+        else:
+            opponent = self.player1
+
+        print(f"Round Number: {self.round}      Mana Per Turn: {self.mana_per_turn}      Opponent Health: {opponent.health}      Opponent Mana: {opponent.mana}")
 
     def determine_mana_amount(self):
         # # Check round number and determine how much mana should be dealt each round currently

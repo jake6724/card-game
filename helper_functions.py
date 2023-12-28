@@ -24,7 +24,7 @@ def create_new_card(card_data_list):
 def duplicate_cards(card_list): 
     duplicated_cards = [] 
     for card in card_list:
-        if int(card.mana) <= 3: 
+        if int(card.mana) <= 2: 
             card_copy = copy.deepcopy(card)
             duplicated_cards.append(card_copy)
     return duplicated_cards

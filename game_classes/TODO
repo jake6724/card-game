@@ -10,3 +10,10 @@ Check if top card exists in deck.get_top_card
 
 fix screen sizing issue 
 
+
+Features 
+
+Start with a deck of two 1 mana and two 2 mana cards 
+
+See opponent players health 
+
