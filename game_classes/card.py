@@ -122,8 +122,8 @@ class Card:
     def add_lane_number(self, l):
         self.lane_num = l 
 
-    # def __str__(self):
-    #     return f"{self.player}:{self.name}" 
+    def __str__(self):
+        return f"{self.player}:{self.name}" 
         
-    # def __repr__(self):
-    #     return f"{self.player}:{self.name}:{self.priority}"
+    def __repr__(self):
+        return f"{self.player}:{self.name}:{self.priority}"
