@@ -269,6 +269,7 @@ class Game_engine:
         # Wrapper to call many other display functions at once in a specified order
         # os.system('cls')
         # self.clear_terminal()
+        self.clear_terminal()
         self.display_round_info()
         self.display_gameboard()
         self.display_current_player_hand()
