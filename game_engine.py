@@ -20,7 +20,7 @@ class Game_engine:
         self.max_placement_cost_to_duplicate = 3
         self.current_player = self.player1
         self.round = 0 
-        self.mana_per_turn = 0
+        self.mana_per_turn = 6
         self.round_interval_to_increase_mana = 10
         self.max_mana_per_turn = 6
         self.winner = None
@@ -265,26 +265,27 @@ class Game_engine:
         print(f"Health: {self.current_player.health}")
 
     def display_game(self):
-        # Display the game for the current player
-        # Wrapper to call many other display functions at once in a specified order
-        # os.system('cls')
         # self.clear_terminal()
-        self.clear_terminal()
         self.display_round_info()
         self.display_gameboard()
         self.display_current_player_hand()
         self.display_current_player_stats()
 
     def display_gameboard(self):
-        self.gb.display_gameboard()
+        # if self.current_player == self.player1:
+        #     self.gb.display_gameboard_p1()
+        # else: 
+        #     self.gb.display_gameboard_p2()
 
+        self.gb.display_gameboard_p1()
+           
     def display_round_info(self):
         if self.current_player == self.player1:
             opponent = self.player2
         else:
             opponent = self.player1
 
-        print(f"Round Number: {self.round}      Mana Per Turn: {self.mana_per_turn}      Opponent Health: {opponent.health}      Opponent Mana: {opponent.mana}")
+        print(f"                [ Round Number: {self.round}      Mana Per Turn: {self.mana_per_turn}      Opponent Health: {opponent.health}      Opponent Mana: {opponent.mana} ]")
 
     def determine_mana_amount(self):
         # # Check round number and determine how much mana should be dealt each round currently

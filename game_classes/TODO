@@ -1,5 +1,3 @@
-Combat log is not resetting correctly / or at the right time
-
 Remove repeat_swap_duration att from card
 
 Pass which card did the damage in card.take_damage

@@ -1,3 +1,5 @@
+import random
+
 class Card: 
     def __init__(self, name: str, mana: int, health: int, start_turn: int, end_turn: int, repeat_card_target: str, repeat_card_damage: int, repeat_player_damage: int, repeat_swap_direction: str, repeat_swap_duration: int, finale_card_target: str, finale_card_damage: int, finale_player_damage: int, finale_swap_direction: str): 
         self.name = name.replace("_", " ")
@@ -89,7 +91,7 @@ class Card:
         
         # Set finale swap info 
         if self.finale_swap_direction != "n":
-            if self.finale_swap_direction != "l":
+            if self.finale_swap_direction == "l":
                 self.desc_finale_swap += f"Swap Left"
             else:
                 self.desc_finale_swap += f"Swap Right"
@@ -120,8 +122,8 @@ class Card:
     def add_lane_number(self, l):
         self.lane_num = l 
 
-    def __str__(self):
-        return f"{self.player}:{self.name}" 
+    # def __str__(self):
+    #     return f"{self.player}:{self.name}" 
         
-    def __repr__(self):
-        return f"{self.player}:{self.name}:{self.priority}"
+    # def __repr__(self):
+    #     return f"{self.player}:{self.name}:{self.priority}"
