@@ -20,7 +20,7 @@ class Game_engine:
         self.max_placement_cost_to_duplicate = 3
         self.current_player = self.player1
         self.round = 0 
-        self.mana_per_turn = 0
+        self.mana_per_turn = 6
         self.round_interval_to_increase_mana = 10
         self.max_mana_per_turn = 6
         self.winner = None
@@ -202,14 +202,14 @@ class Game_engine:
         print("Running combat phase")
         # Sort gb.active_card list based on card priority var
         self.gb.sort_active_cards()
-
-        # Reset combat log 
+        self.gb.reset_card_combat_logs()
         self.gb.reset_combat_log()
-        print(f"GB active card list at combat time: {self.gb.active_card_list}")
+
+        print(f"GB active card list at start of round {self.round} combat: {self.gb.active_card_list}")
 
         # Main combat loop 
         # Get each card in sorted active cards list 
-        for i, card in enumerate(self.gb.active_card_list): 
+        for i, card in enumerate(self.gb.active_card_list): # Maybe use copy ?
             print(f"Card doing combat: {card}")
             # Run its combat actions
             self.gb.run_card_combat_actions(card, self.player1, self.player2)
@@ -217,13 +217,13 @@ class Game_engine:
             
             # Check that current card is not the last card in list (index would go out of range)
             if i != (len(self.gb.active_card_list) - 1):
-                # If next card DOES NOT have same priority, update game board
+                # Update GB if next card **DOES NOT** have the same priority as current card 
                 if self.gb.active_card_list[(i + 1)].priority != card.priority:
                     self.gb.update()
             else: # Update if last card in the list (Also ensures board is always updated atleast once after a combat round)
                 self.gb.update()
 
-        print("Combat phase over")
+        print(f"Round {self.round} Combat phase over")
 
     def add_cards_to_gameboard(self, player1_card_data_list, player2_card_data_list):
         # Add cards to gameboard 

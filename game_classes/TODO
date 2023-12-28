@@ -1,10 +1,10 @@
-Check that combat log wroking right. Not showing fdinale data 
+Combat log is not resetting correctly / or at the right time
 
-Check card counter logic 
+Remove repeat_swap_duration att from card
 
-p2 cards not leaving board at right time 
+Pass which card did the damage in card.take_damage
 
-0/0 cards like thief are not staying on board long enough to see 
+Add death/left board message to combat log 
 
 Check if top card exists in deck.get_top_card
 
