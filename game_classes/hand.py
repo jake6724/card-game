@@ -4,7 +4,7 @@ class Hand():
     # Unlike deck hand starts with an empty card list. Use player -> draw_card func to add cards 
     def __init__(self):
         self.card_list = []
-        self.empty_card = Card("empty",0,0,0,0,"n",0,0,"n",0,"n",0,0,"n")
+        self.empty_card = Card("empty",0,0,0,0,"n",0,0,"n","n",0,0,"n")
         self.empty_card.create_description()
 
     def add_card_to_hand(self, new_card):

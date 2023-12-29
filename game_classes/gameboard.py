@@ -6,7 +6,7 @@ import copy
 
 class GameBoard:
     def __init__(self): 
-        self.empty_lane_card = Card("empty",0,0,0,0,"n",0,0,"n",0,"n",0,0,"n")
+        self.empty_lane_card = Card("empty",0,0,0,0,"n",0,0,"n","n",0,0,"n")
         self.empty_lane_card.create_description() 
         # Maybe dont need deep copies here ..............
         self.lane_list = [Lane(1, copy.deepcopy(self.empty_lane_card)), Lane(2, copy.deepcopy(self.empty_lane_card)), Lane(3, copy.deepcopy(self.empty_lane_card)), 
@@ -122,13 +122,17 @@ class GameBoard:
             self.swap_cards(card, swap_target_lane)
             card.log_swap = f"{card.name} swapped with card in lane {swap_target_lane}"
 
+            # Prob need to get the target again 
+
         if card.finale_card_target == "c":
-            print(f"{card} dealing {card.finale_card_damage} to {card_target}")
-            card_target.take_damage(card.finale_card_damage)
-            card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to {card_target.name}"
+            if card_target.name != "empty": # Don't do opponent card attack if the card is empty 
+                card_target.take_damage(card.finale_card_damage)
+                card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to {card_target.name}"
+
         elif card.finale_card_target == "a":
             for target in card_all_targets:
-                target.take_damage(card.finale_card_damage)
+                if target.name != "empty": # Don't do opponent card attack if the card is empty 
+                    target.take_damage(card.finale_card_damage)
             card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to all enemy cards"
             
         if card.finale_player_damage > 0:
@@ -141,12 +145,14 @@ class GameBoard:
             card.log_swap = f"{card.name} swapped with card in lane {swap_target_lane}"
         
         if card.repeat_card_target == "c":
-            card_target.take_damage(card.repeat_card_damage)
-            card.log_card = f"{card.name} dealt {card.repeat_card_damage} dmg to {card_target.name}"
+            if card_target.name != "empty": # Don't do opponent card attack if the card is empty 
+                card_target.take_damage(card.repeat_card_damage)
+                card.log_card = f"{card.name} dealt {card.repeat_card_damage} dmg to {card_target.name}"
 
         elif card.repeat_card_target == "a":
             for target in card_all_targets:
-                target.take_damage(card.repeat_card_damage)
+                if target.name != "empty": # Don't do opponent card attack if the card is empty 
+                    target.take_damage(card.repeat_card_damage)
             card.log_card = f"{card.name} dealt {card.repeat_card_damage} dmg to all enemy cards"
             
         if card.repeat_player_damage > 0:

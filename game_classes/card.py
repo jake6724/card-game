@@ -1,7 +1,7 @@
 import random
 
 class Card: 
-    def __init__(self, name: str, mana: int, health: int, start_turn: int, end_turn: int, repeat_card_target: str, repeat_card_damage: int, repeat_player_damage: int, repeat_swap_direction: str, repeat_swap_duration: int, finale_card_target: str, finale_card_damage: int, finale_player_damage: int, finale_swap_direction: str): 
+    def __init__(self, name: str, mana: int, health: int, start_turn: int, end_turn: int, repeat_card_target: str, repeat_card_damage: int, repeat_player_damage: int, repeat_swap_direction: str, finale_card_target: str, finale_card_damage: int, finale_player_damage: int, finale_swap_direction: str): 
         self.name = name.replace("_", " ")
         self.mana = int(mana) 
         self.health = int(health)
@@ -11,7 +11,6 @@ class Card:
         self.repeat_card_damage = int(repeat_card_damage)
         self.repeat_player_damage = int(repeat_player_damage)
         self.repeat_swap_direction = str(repeat_swap_direction)
-        self.repeat_swap_duration = int(repeat_swap_duration)
         self.finale_card_target = str(finale_card_target)
         self.finale_card_damage = int(finale_card_damage)
         self.finale_player_damage = int(finale_player_damage)
@@ -68,11 +67,10 @@ class Card:
             self.desc_repeat_player_damage += f"{self.repeat_player_damage} dmg to enemy player"
 
         # Set repeat swap info 
-        if self.repeat_swap_duration > 0:
-            if self.repeat_swap_direction == "l":
-                self.desc_repeat_swap += f"Swap Left"
-            else:
-                self.desc_repeat_swap += f"Swap Right"
+        if self.repeat_swap_direction == "l":
+            self.desc_repeat_swap += f"Swap Left"
+        elif self.repeat_swap_direction == "r":
+            self.desc_repeat_swap += f"Swap Right"
 
         # Set finale line 
         if self.finale_card_damage > 0 or self.finale_player_damage > 0 or self.finale_swap_direction != "n":
@@ -90,11 +88,10 @@ class Card:
             self.desc_finale_player_damage += f"{self.finale_player_damage} dmg to enemy player"
         
         # Set finale swap info 
-        if self.finale_swap_direction != "n":
-            if self.finale_swap_direction == "l":
-                self.desc_finale_swap += f"Swap Left"
-            else:
-                self.desc_finale_swap += f"Swap Right"
+        if self.finale_swap_direction == "l":
+            self.desc_finale_swap += f"Swap Left"
+        elif self.finale_swap_direction == "r":
+            self.desc_finale_swap += f"Swap Right"
 
     # def create_combat_log(self):
     #     self.log_repeat_card = ""

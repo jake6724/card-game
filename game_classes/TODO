@@ -1,4 +1,4 @@
-Remove repeat_swap_duration att from card
+Check that card does damage after swapping 
 
 Pass which card did the damage in card.take_damage
 
@@ -8,10 +8,10 @@ Check if top card exists in deck.get_top_card
 
 fix screen sizing issue 
 
-
 Features 
+Show which player owns a card in combat log 
 
 Start with a deck of two 1 mana and two 2 mana cards 
 
-See opponent players health 
+Check if player died 
 

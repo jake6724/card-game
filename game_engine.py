@@ -20,7 +20,7 @@ class Game_engine:
         self.max_placement_cost_to_duplicate = 3
         self.current_player = self.player1
         self.round = 0 
-        self.mana_per_turn = 6
+        self.mana_per_turn = 0
         self.round_interval_to_increase_mana = 10
         self.max_mana_per_turn = 6
         self.winner = None
@@ -272,12 +272,12 @@ class Game_engine:
         self.display_current_player_stats()
 
     def display_gameboard(self):
-        # if self.current_player == self.player1:
-        #     self.gb.display_gameboard_p1()
-        # else: 
-        #     self.gb.display_gameboard_p2()
+        if self.current_player == self.player1:
+            self.gb.display_gameboard_p1()
+        else: 
+            self.gb.display_gameboard_p2()
 
-        self.gb.display_gameboard_p1()
+        # self.gb.display_gameboard_p1()
            
     def display_round_info(self):
         if self.current_player == self.player1:
