@@ -57,10 +57,10 @@ class GameBoard:
 
         # Run card combat 
         if card.counter == card.end_turn:
-            self.run_finale_combat(card, finale_swap_target_lane, card_target, card_all_targets, player_target)
+            self.run_finale_combat(card, finale_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
 
         elif card.counter >= card.start_turn: 
-            self.run_repeat_combat(card, repeat_swap_target_lane, card_target, card_all_targets, player_target)
+            self.run_repeat_combat(card, repeat_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
 
     def get_combat_targets(self, card, p1, p2):
         # Order of operations for attacking: 1. Swap, 2. Card Damage, 3. Player Damage 
@@ -117,12 +117,18 @@ class GameBoard:
 
         return [card_target, card_all_targets, player_target, repeat_swap_target_lane, finale_swap_target_lane]
 
-    def run_finale_combat(self, card:Card, swap_target_lane, card_target: Card, card_all_targets: list[Card], player_target: Player):
+    def run_finale_combat(self, card:Card, swap_target_lane, card_target: Card, card_all_targets: list[Card], player_target: Player, p1: Player, p2: Player):
         if swap_target_lane != None:
             self.swap_cards(card, swap_target_lane)
             card.log_swap = f"{card.name} swapped with card in lane {swap_target_lane}"
 
             # Prob need to get the target again 
+            target_results = self.get_combat_targets(card, p1, p2)
+            card_target = target_results[0]
+            card_all_targets = target_results[1]
+            player_target = target_results[2]
+            # repeat_swap_target_lane = target_results[3]
+            # finale_swap_target_lane = target_results[4]
 
         if card.finale_card_target == "c":
             if card_target.name != "empty": # Don't do opponent card attack if the card is empty 
