@@ -5,6 +5,8 @@ class Player:
         self.name = name 
         self.health = 20
         self.mana = int(0) 
+        self.is_dead = False
+        self.killed_by = None
         # Additional self.vars that are added below:
         #self.deck
         #self.hand
@@ -36,6 +38,10 @@ class Player:
 
     def take_damage(self, damage_amount, attacker):
         self.health -= damage_amount
+
+        if self.health <= 0:
+            self.is_dead = True 
+            self.killed_by = attacker
 
     def print_deck(self):
         self.deck.print_card_list()

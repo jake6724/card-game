@@ -24,6 +24,7 @@ class Game_engine:
         self.round_interval_to_increase_mana = 10
         self.max_mana_per_turn = 6
         self.winner = None
+        self.loser = None
 
     def run_setup(self):
         self.assign_player_decks()
@@ -39,6 +40,16 @@ class Game_engine:
             self.placement_phase()
 
             self.combat_phase()
+
+            if self.player1.is_dead:
+                self.winner = self.player2
+                self.loser = self.player1
+                self.end_game()
+
+            elif self.player2.is_dead:
+                self.winner = self.player1
+                self.loser = self.player2
+                self.end_game()
 
     def gen_player_decks(self):
         # player1_deck = Deck() 
@@ -226,6 +237,9 @@ class Game_engine:
                     self.gb.update()
             else: # Update if last card in the list (Also ensures board is always updated atleast once after a combat round)
                 self.gb.update()
+
+    def end_game(self):
+        print(f"{self.winner} is the winner! {self.loser} was killed by {self.loser.killed_by}")
 
     def add_cards_to_gameboard(self, player1_card_data_list, player2_card_data_list):
         # Add cards to gameboard 

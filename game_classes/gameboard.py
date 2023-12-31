@@ -163,12 +163,11 @@ class GameBoard:
         elif card_dmg_target == "a":
             for target in card_all_targets:
                 if target.name != "empty": # Don't do opponent card attack if the card is empty 
-                    card_target.take_damage(card_dmg, card)
-
-                # Check if this damage killed the card, if so add to combat log 
-                if card_target.is_dead:
-                    card.killed_cards_list.append(card_target)
-                    card.log_killed_cards = f"{card} killed {card.killed_cards_list}"
+                    target.take_damage(card_dmg, card)
+                    # Check if this damage killed the card, if so add to combat log 
+                    if target.is_dead:
+                        card.killed_cards_list.append(target)
+                        card.log_killed_cards = f"{card} killed {card.killed_cards_list}"
 
             card.log_card = f"{card} dealt {card_dmg} {m} dmg to all enemy cards"
             
@@ -199,6 +198,8 @@ class GameBoard:
             card.log_swap = ""
             card.log_card = ""
             card.log_player = ""
+            card.log_killed_cards = ""
+            card.killed_cards_list = []
 
     def create_combat_log(self):
         # Add data from all active cards 
