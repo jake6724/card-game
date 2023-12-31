@@ -93,16 +93,8 @@ class Card:
         elif self.finale_swap_direction == "r":
             self.desc_finale_swap += f"Swap Right"
 
-    # def create_combat_log(self):
-    #     self.log_repeat_card = ""
-    #     self.log_repeat_player = ""
-    #     self.log_repeat_swap = ""
-    #     self.log_finale_card = ""
-    #     self.log_finale_player = ""
-    #     self.log_finale_swap = ""
-
-    def take_damage(self, damage_amount):
-        print(f"{self}: I took {damage_amount} dmg")
+    def take_damage(self, damage_amount, attacker):
+        print(f"{self}: I took {damage_amount} dmg from {attacker.name}")
         self.health -= damage_amount
 
     def increase_counter(self):

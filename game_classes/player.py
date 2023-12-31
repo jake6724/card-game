@@ -34,7 +34,7 @@ class Player:
     def clear_mana(self):
         self.mana = 0
 
-    def take_damage(self, damage_amount):
+    def take_damage(self, damage_amount, attacker):
         self.health -= damage_amount
 
     def print_deck(self):

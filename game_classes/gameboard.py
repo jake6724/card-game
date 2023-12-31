@@ -55,12 +55,19 @@ class GameBoard:
         repeat_swap_target_lane = target_results[3]
         finale_swap_target_lane = target_results[4]
 
-        # Run card combat 
+        # # Run card combat 
+        # if card.counter == card.end_turn:
+        #     self.run_finale_combat(card, finale_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
+
+        # elif card.counter >= card.start_turn: 
+        #     self.run_repeat_combat(card, repeat_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
+
+          # Run card combat 
         if card.counter == card.end_turn:
-            self.run_finale_combat(card, finale_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
+            self.run_combat("f", card, finale_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
 
         elif card.counter >= card.start_turn: 
-            self.run_repeat_combat(card, repeat_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
+            self.run_combat("r", card, repeat_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
 
     def get_combat_targets(self, card, p1, p2):
         # Order of operations for attacking: 1. Swap, 2. Card Damage, 3. Player Damage 
@@ -117,61 +124,46 @@ class GameBoard:
 
         return [card_target, card_all_targets, player_target, repeat_swap_target_lane, finale_swap_target_lane]
 
-    def run_finale_combat(self, card:Card, swap_target_lane, card_target: Card, card_all_targets: list[Card], player_target: Player, p1: Player, p2: Player):
+    def run_combat(self, finale_or_repeat: str, card:Card, swap_target_lane, card_target: Card, card_all_targets: list[Card], player_target: Player, p1: Player, p2: Player):
+        # Set up vars for either repeat or finale damage 
+        if finale_or_repeat == "f":
+            card_dmg_target = "finale_card_target"
+            card_dmg = "finale_card_damage"
+            player_dmg = "finale_player_damage"
+            m = "finale"
+            print("Finale vars set")
+
+        elif finale_or_repeat == "r":
+            card_dmg_target = "repeat_card_target"
+            card_dmg = "repeat_card_damage"
+            player_dmg = "repeat_player_damage"
+            m = ""
+            print("Repeat vars set")
+
         if swap_target_lane != None:
             self.swap_cards(card, swap_target_lane)
             card.log_swap = f"{card.name} swapped with card in lane {swap_target_lane}"
 
-            # Prob need to get the target again 
+            # Re-determine card targets based on new board location 
             target_results = self.get_combat_targets(card, p1, p2)
             card_target = target_results[0]
             card_all_targets = target_results[1]
             player_target = target_results[2]
-            # repeat_swap_target_lane = target_results[3]
-            # finale_swap_target_lane = target_results[4]
 
-        if card.finale_card_target == "c":
+        if getattr(card, card_dmg_target) == "c":
             if card_target.name != "empty": # Don't do opponent card attack if the card is empty 
-                card_target.take_damage(card.finale_card_damage)
-                card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to {card_target.name}"
+                card_target.take_damage(getattr(card, card_dmg), card)
+                card.log_card = f"{card.name} dealt {getattr(card, card_dmg)} {m} dmg to {card_target.name}"
 
-        elif card.finale_card_target == "a":
+        elif getattr(card, card_dmg_target) == "a":
             for target in card_all_targets:
                 if target.name != "empty": # Don't do opponent card attack if the card is empty 
-                    target.take_damage(card.finale_card_damage)
-            card.log_card = f"{card.name} dealt {card.finale_card_damage} finale dmg to all enemy cards"
+                    card_target.take_damage(getattr(card, card_dmg), card)
+            card.log_card = f"{card.name} dealt {getattr(card, card_dmg)} {m} dmg to all enemy cards"
             
-        if card.finale_player_damage > 0:
-            player_target.take_damage(card.finale_player_damage) 
-            card.log_player = f"{card.name} dealt {card.finale_player_damage} finale dmg to {player_target.name}"
-
-    def run_repeat_combat(self, card:Card, swap_target_lane, card_target: Card, card_all_targets: list[Card], player_target: Player, p1: Player, p2: Player):
-        if swap_target_lane != None:
-            self.swap_cards(card, swap_target_lane)
-            card.log_swap = f"{card.name} swapped with card in lane {swap_target_lane}"
-            
-            # Prob need to get the target again 
-            target_results = self.get_combat_targets(card, p1, p2)
-            card_target = target_results[0]
-            card_all_targets = target_results[1]
-            player_target = target_results[2]
-            # repeat_swap_target_lane = target_results[3]
-            # finale_swap_target_lane = target_results[4]
-        
-        if card.repeat_card_target == "c":
-            if card_target.name != "empty": # Don't do opponent card attack if the card is empty 
-                card_target.take_damage(card.repeat_card_damage)
-                card.log_card = f"{card.name} dealt {card.repeat_card_damage} dmg to {card_target.name}"
-
-        elif card.repeat_card_target == "a":
-            for target in card_all_targets:
-                if target.name != "empty": # Don't do opponent card attack if the card is empty 
-                    target.take_damage(card.repeat_card_damage)
-            card.log_card = f"{card.name} dealt {card.repeat_card_damage} dmg to all enemy cards"
-            
-        if card.repeat_player_damage > 0:
-                player_target.take_damage(card.repeat_player_damage)
-                card.log_player = f"{card.name} dealt {card.repeat_player_damage} dmg to {player_target.name}"
+        if getattr(card, player_dmg) > 0:
+            player_target.take_damage((getattr(card, player_dmg)), card) 
+            card.log_player = f"{card.name} dealt {getattr(card, player_dmg)} {m} dmg to {player_target.name}"
 
     def swap_cards(self, card, swap_target_lane): # TODO Needs cleanup 
         # Save the target lanes card in a temp_card value
@@ -189,7 +181,6 @@ class GameBoard:
         # Update both cards internal lane num
         card.lane_num = swap_target_lane.number
         temp_card.lane_num = original_lane.number
-
 
     def reset_combat_log(self):
         self.combat_data = [["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""],

@@ -1,11 +1,14 @@
-
 Pass which card did the damage in card.take_damage
 
 Add death/left board message to combat log 
 
 Check if top card exists in deck.get_top_card
 
+cleanup all the print statements
+
 fix screen sizing issue 
+
+refactor gameboard.run_repeated/finale_combat functions to be 1 and just pass in finale or repeate values 
 
 Features 
 Show which player owns a card in combat log 
