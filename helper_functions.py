@@ -1,6 +1,7 @@
 import random
 import copy
 from game_classes.card import Card 
+from game_classes.deck import Deck
 
 
 def shuffle_card_list(card_list): 
@@ -20,6 +21,22 @@ def create_new_card(card_data_list):
                     card_data_list[6], card_data_list[7], card_data_list[8], card_data_list[9], card_data_list[10], card_data_list[11], 
                     card_data_list[12])    
     return new_card
+
+def get_cards_by_mana(deck: Deck, mana_num: int, amount: int):
+    # Creates a card list filled of size (amount), filled with cards of specified mana 
+    # Removes card from deck when it finds it 
+    return_cards = []
+    counter = 0
+    while len(return_cards) != amount:
+        print("running while")
+        if deck.card_list[counter].mana == mana_num:
+            return_cards.append(deck.card_list[counter])
+            deck.card_list.remove(deck.card_list[counter])
+        counter += 1 
+    
+    print(f"return cards: {return_cards}")
+
+    return return_cards
 
 def duplicate_cards(card_list): 
     duplicated_cards = [] 

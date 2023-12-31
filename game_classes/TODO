@@ -1,4 +1,3 @@
-Check that card does damage after swapping 
 
 Pass which card did the damage in card.take_damage
 
@@ -10,8 +9,6 @@ fix screen sizing issue
 
 Features 
 Show which player owns a card in combat log 
-
-Start with a deck of two 1 mana and two 2 mana cards 
 
 Check if player died 
 

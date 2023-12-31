@@ -6,7 +6,7 @@ from game_classes.hand import Hand
 import copy
 import os
 import time 
-from helper_functions import shuffle_card_list, create_new_card, duplicate_cards, append_card_list
+from helper_functions import shuffle_card_list, create_new_card, duplicate_cards, append_card_list, get_cards_by_mana
 
 class Game_engine: 
     def __init__(self, card_data_file):
@@ -27,8 +27,8 @@ class Game_engine:
 
     def run_setup(self):
         self.assign_player_decks()
-        self.assign_player_starting_hands()
-        self.gen_gameboard_assign__player_lanes()
+        self.assign_starting_hands()
+        self.gen_gameboard_assign_player_lanes()
 
     def run_game_loop(self):
         while self.winner == None: 
@@ -36,15 +36,13 @@ class Game_engine:
 
             self.deal_mana()
             
-            # Run placement phase 
             self.placement_phase()
 
-            # # Run combat phase 
             self.combat_phase()
 
     def gen_player_decks(self):
-        player1_deck = Deck() 
-        player2_deck = Deck() 
+        # player1_deck = Deck() 
+        # player2_deck = Deck() 
         temp_card_list = []
 
         # Create cards based off data in self.card_data_file 
@@ -54,7 +52,7 @@ class Game_engine:
             new_card = create_new_card(line_data_list)
     
             temp_card_list.append(new_card)
-        
+
         # Duplicate all cards with value <= self.max_placement_cost_to_duplicate
         duplicated_cards = duplicate_cards(temp_card_list)
 
@@ -64,9 +62,8 @@ class Game_engine:
         # Shuffle cards 
         shuffle_card_list(temp_card_list)
 
-        # Assign decks to player (exact copies of each other w/ same shuffling)
-        player1_deck.add_card_list(temp_card_list)
-        player2_deck.add_card_list(copy.deepcopy(temp_card_list))
+        player1_deck = Deck(temp_card_list) 
+        player2_deck = Deck(copy.deepcopy(temp_card_list)) 
 
         # Set player value for each card in player decks 
         for i in range(len(temp_card_list)):
@@ -83,15 +80,8 @@ class Game_engine:
 
         self.player1.add_deck(deck_list[0])
         self.player2.add_deck(deck_list[1])
- 
-    def assign_player_starting_hands(self): 
-        player1_hand = Hand()
-        player2_hand = Hand()
 
-        self.player1.add_hand(player1_hand)
-        self.player2.add_hand(player2_hand)
-
-    def gen_gameboard_assign__player_lanes(self):
+    def gen_gameboard_assign_player_lanes(self):
         gb = GameBoard()
         self.gb = gb
 
@@ -107,6 +97,24 @@ class Game_engine:
         self.determine_mana_amount()
         self.player1.add_mana(self.mana_per_turn)
         self.player2.add_mana(self.mana_per_turn)
+
+    def assign_starting_hands(self):
+        # Set up hand for player 1 
+        one_mana_cards = get_cards_by_mana(self.player1.deck, 1, 3) 
+        two_mana_cards = get_cards_by_mana(self.player1.deck, 2, 1) 
+        p1_initial_hand = one_mana_cards + two_mana_cards
+
+        # Set up hand for player 2
+        one_mana_cards = get_cards_by_mana(self.player2.deck, 1, 3)  
+        two_mana_cards = get_cards_by_mana(self.player2.deck, 2, 1) 
+        p2_initial_hand = one_mana_cards + two_mana_cards
+
+        # Assign starting hands 
+        player1_hand = Hand(p1_initial_hand)
+        player2_hand = Hand(p2_initial_hand)
+
+        self.player1.add_hand(player1_hand)
+        self.player2.add_hand(player2_hand)
 
     def draw_player_cards(self):
         # Remove the empty card if it exists currently. There is only 1 that is a placeholder for all empty spaces in the hand
