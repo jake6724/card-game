@@ -32,8 +32,6 @@ def get_cards_by_mana(deck: Deck, mana_num: int, amount: int):
             return_cards.append(deck.card_list[counter])
             deck.card_list.remove(deck.card_list[counter])
         counter += 1 
-    
-    print(f"return cards: {return_cards}")
 
     return return_cards
 
