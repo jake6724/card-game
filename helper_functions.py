@@ -28,7 +28,6 @@ def get_cards_by_mana(deck: Deck, mana_num: int, amount: int):
     return_cards = []
     counter = 0
     while len(return_cards) != amount:
-        print("running while")
         if deck.card_list[counter].mana == mana_num:
             return_cards.append(deck.card_list[counter])
             deck.card_list.remove(deck.card_list[counter])
