@@ -136,15 +136,19 @@ class Game_engine:
         for card in self.player2.hand.card_list:
             if card.name == "empty":
                 self.player2.hand.card_list.remove(card)
-        
-        while len(self.player1.hand.card_list) != self.hand_size:
-            self.player1.draw_card()
 
-        while len(self.player2.hand.card_list) != self.hand_size:
-            self.player2.draw_card()
+        # Only draw cards for a player if they have enough to draw
+        while len(self.player1.deck.card_list) > 0:
+            if len(self.player1.hand.card_list) != self.hand_size:
+                self.player1.draw_card()
+            elif len(self.player1.hand.card_list) == self.hand_size:
+                break
 
-        print(f"Player1's Hand after drawing: {self.player1.hand.card_list}")
-        print(f"Player2's Hand after drawing: {self.player2.hand.card_list}")
+        while len(self.player2.deck.card_list) > 0:
+            if len(self.player2.hand.card_list) != self.hand_size:
+                self.player2.draw_card()
+            elif len(self.player2.hand.card_list) == self.hand_size:
+                break
         
     def placement_phase(self):
         # Draw cards back to full
@@ -226,11 +230,13 @@ class Game_engine:
                 self.winner = self.player2
                 self.loser = self.player1
                 self.end_game()
+                return []
 
             elif self.player2.is_dead:
                 self.winner = self.player1
                 self.loser = self.player2
                 self.end_game()
+                return []
 
         return cards_to_add
 

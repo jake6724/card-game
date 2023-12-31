@@ -6,7 +6,7 @@ class Player:
         self.health = 20
         self.mana = int(0) 
         self.is_dead = False
-        self.killed_by = None
+        self.killed_by = "Running out of cards"
         # Additional self.vars that are added below:
         #self.deck
         #self.hand

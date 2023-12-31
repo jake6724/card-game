@@ -1,6 +1,3 @@
-
-Check if top card exists in deck.get_top_card
-
 fix screen sizing issue 
 
 Make lanes numbers same for each player (On user end)

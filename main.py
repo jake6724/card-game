@@ -9,3 +9,5 @@ G = Game_engine("card_data_sets/card_data7.txt")
 
 G.run_setup()
 G.run_game_loop()
+
+print("Game Ended")
