@@ -31,7 +31,6 @@ class GameBoard:
 
     def add_to_active_cards(self, card_to_add):
         self.active_card_list.append(card_to_add)
-        print(f"Card added to GB Active cards. New list: {self.active_card_list}")
 
     def get_card_priority(self, card):
         return card.priority
@@ -127,19 +126,18 @@ class GameBoard:
     def run_combat(self, finale_or_repeat: str, card:Card, swap_target_lane, card_target: Card, card_all_targets: list[Card], player_target: Player, p1: Player, p2: Player):
         # Set up vars for either repeat or finale damage 
         if finale_or_repeat == "f":
-            card_dmg_target = "finale_card_target"
-            card_dmg = "finale_card_damage"
-            player_dmg = "finale_player_damage"
+            card_dmg_target = getattr(card, "finale_card_target")
+            card_dmg = getattr(card, "finale_card_damage")
+            player_dmg = getattr(card, "finale_player_damage")
             m = "finale"
-            print("Finale vars set")
 
         elif finale_or_repeat == "r":
-            card_dmg_target = "repeat_card_target"
-            card_dmg = "repeat_card_damage"
-            player_dmg = "repeat_player_damage"
+            card_dmg_target = getattr(card, "repeat_card_target")
+            card_dmg = getattr(card, "repeat_card_damage")
+            player_dmg = getattr(card, "repeat_player_damage")
             m = ""
-            print("Repeat vars set")
 
+        # Swapping 
         if swap_target_lane != None:
             self.swap_cards(card, swap_target_lane)
             card.log_swap = f"{card.name} swapped with card in lane {swap_target_lane}"
@@ -150,20 +148,21 @@ class GameBoard:
             card_all_targets = target_results[1]
             player_target = target_results[2]
 
-        if getattr(card, card_dmg_target) == "c":
+        # Combat
+        if card_dmg_target == "c":
             if card_target.name != "empty": # Don't do opponent card attack if the card is empty 
-                card_target.take_damage(getattr(card, card_dmg), card)
-                card.log_card = f"{card.name} dealt {getattr(card, card_dmg)} {m} dmg to {card_target.name}"
+                card_target.take_damage(card_dmg, card)
+                card.log_card = f"{card.name} dealt {card_dmg} {m} dmg to {card_target.name}"
 
-        elif getattr(card, card_dmg_target) == "a":
+        elif card_dmg_target == "a":
             for target in card_all_targets:
                 if target.name != "empty": # Don't do opponent card attack if the card is empty 
-                    card_target.take_damage(getattr(card, card_dmg), card)
-            card.log_card = f"{card.name} dealt {getattr(card, card_dmg)} {m} dmg to all enemy cards"
+                    card_target.take_damage(card_dmg, card)
+            card.log_card = f"{card.name} dealt {card_dmg} {m} dmg to all enemy cards"
             
-        if getattr(card, player_dmg) > 0:
-            player_target.take_damage((getattr(card, player_dmg)), card) 
-            card.log_player = f"{card.name} dealt {getattr(card, player_dmg)} {m} dmg to {player_target.name}"
+        if player_dmg > 0:
+            player_target.take_damage(player_dmg, card) 
+            card.log_player = f"{card.name} dealt {player_dmg} {m} dmg to {player_target.name}"
 
     def swap_cards(self, card, swap_target_lane): # TODO Needs cleanup 
         # Save the target lanes card in a temp_card value
@@ -171,9 +170,6 @@ class GameBoard:
         # Place the temp_card value into the original lane 
 
         temp_card = swap_target_lane.active_card
-        print(f"temp_card card is {temp_card}")
-        print(f"Current card's lane {card.lane_num}")
-        print(f"Swap target lane = {swap_target_lane}")
         swap_target_lane.set_active_card(card)
         original_lane = self.get_lane_by_number(card.lane_num)
         original_lane.set_active_card(temp_card)
@@ -185,7 +181,6 @@ class GameBoard:
     def reset_combat_log(self):
         self.combat_data = [["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""],
                             ["", "", ""], ["", "", ""], ["", "", ""], ["", "", ""]]
-        print("Combat log reset")
 
     def reset_card_combat_logs(self):
         for card in self.active_card_list:
@@ -194,7 +189,6 @@ class GameBoard:
             card.log_player = ""
 
     def create_combat_log(self):
-        print("Creating Combat Log")
         # Add data from all active cards 
         for i, card in enumerate(self.active_card_list):
             self.combat_data[i] = [card.log_swap, card.log_card, card.log_player]
@@ -203,16 +197,12 @@ class GameBoard:
         while len(self.combat_data) != 8:
             self.combat_data.append(["", "", ""])
 
-        print(f"Combat data: {self.combat_data}")
-
     def update(self):
-        print("Running Update")
         self.create_combat_log()
 
         for i, card in enumerate(self.active_card_list[:]): # MUST USE COPY OF LIST WHEN REMOVING ITEMS OR WILL SKIP ITEMS (what the [:] helps with)
-            print(f"Active card list at update time: {self.active_card_list}")
-            print(f"Current card: {card}")
             card.create_description()
+            print(f"Card health: {card.health}")
             if card.health <= 0:
                 self.remove_active_card(card)
                 print(f"Card health too low, removing {card}")
@@ -220,8 +210,6 @@ class GameBoard:
             elif card.counter > card.end_turn: # Possible problem area 
                 print(f"Counter:{card.counter} higher than end turn: {card.end_turn}, removing {card}")
                 self.remove_active_card(card)
-
-        print("GB Updated!")
 
     def remove_active_card(self, card):
         # Reset card's lane to empty

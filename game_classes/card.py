@@ -94,8 +94,8 @@ class Card:
             self.desc_finale_swap += f"Swap Right"
 
     def take_damage(self, damage_amount, attacker):
+        self.health =  self.health - damage_amount
         print(f"{self}: I took {damage_amount} dmg from {attacker.name}")
-        self.health -= damage_amount
 
     def increase_counter(self):
         self.counter = self.counter + 1 

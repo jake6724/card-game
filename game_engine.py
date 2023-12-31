@@ -207,18 +207,14 @@ class Game_engine:
         return cards_to_add
 
     def combat_phase(self):
-        print("Running combat phase")
         # Sort gb.active_card list based on card priority var
         self.gb.sort_active_cards()
         self.gb.reset_card_combat_logs()
         self.gb.reset_combat_log()
 
-        print(f"GB active card list at start of round {self.round} combat: {self.gb.active_card_list}")
-
         # Main combat loop 
         # Get each card in sorted active cards list 
         for i, card in enumerate(self.gb.active_card_list): # Maybe use copy ?
-            print(f"Card doing combat: {card}")
             # Run its combat actions
             self.gb.run_card_combat_actions(card, self.player1, self.player2)
             card.increase_counter()
@@ -230,8 +226,6 @@ class Game_engine:
                     self.gb.update()
             else: # Update if last card in the list (Also ensures board is always updated atleast once after a combat round)
                 self.gb.update()
-
-        print(f"Round {self.round} Combat phase over")
 
     def add_cards_to_gameboard(self, player1_card_data_list, player2_card_data_list):
         # Add cards to gameboard 
