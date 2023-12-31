@@ -22,9 +22,15 @@ class Card:
         self.taken_turn = False
         self.counter = 0 
 
+        self.killed_cards_list = []
+
         self.log_swap = ""
         self.log_card = ""
         self.log_player = ""
+        self.log_killed_cards = ""
+        self.log_left_board = ""
+
+        self.is_dead = False
 
         self.create_description()
 
@@ -95,11 +101,13 @@ class Card:
 
     def take_damage(self, damage_amount, attacker):
         self.health =  self.health - damage_amount
-        print(f"{self}: I took {damage_amount} dmg from {attacker.name}")
+        # print(f"{self}: I took {damage_amount} dmg from {attacker.name}")
+        if self.health <= 0:
+            self.is_dead = True 
 
     def increase_counter(self):
         self.counter = self.counter + 1 
-        print(f"{self.name} counter increased to {self.counter}")
+        # print(f"{self.name} counter increased to {self.counter}")
 
     def add_priority(self, round_num, card_priority):
         p = str(round_num) + str(card_priority)
@@ -112,7 +120,7 @@ class Card:
         self.lane_num = l 
 
     def __str__(self):
-        return f"{self.player}:{self.name}" 
+        return f"{self.player}'s {self.name}" 
         
     def __repr__(self):
-        return f"{self.player}:{self.name}:{self.priority}"
+        return f"{self.player}'s {self.name}"

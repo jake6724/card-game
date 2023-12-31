@@ -12,7 +12,7 @@ class Game_engine:
     def __init__(self, card_data_file):
         self.deck = []
         self.card_data_file = card_data_file
-        self.player_list = [Player("PLAYER 1"), Player("PLAYER 2")]
+        self.player_list = [Player("P1"), Player("P2")]
         self.player1 = self.player_list[0]
         self.player2 = self.player_list[1]
         self.hand_size = 4
