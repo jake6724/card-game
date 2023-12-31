@@ -3,8 +3,6 @@ Check if top card exists in deck.get_top_card
 
 fix screen sizing issue 
 
-Check if player died 
-
 Make lanes numbers same for each player (On user end)
 
 Fix gap where {m} value is in combat logging 

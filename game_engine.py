@@ -129,7 +129,7 @@ class Game_engine:
 
     def draw_player_cards(self):
         # Remove the empty card if it exists currently. There is only 1 that is a placeholder for all empty spaces in the hand
-        for card in self.player1.hand.card_list:
+        for i, card in enumerate(self.player1.hand.card_list[:]):
             if card.name == "empty":
                 self.player1.hand.card_list.remove(card)
 
@@ -142,6 +142,9 @@ class Game_engine:
 
         while len(self.player2.hand.card_list) != self.hand_size:
             self.player2.draw_card()
+
+        print(f"Player1's Hand after drawing: {self.player1.hand.card_list}")
+        print(f"Player2's Hand after drawing: {self.player2.hand.card_list}")
         
     def placement_phase(self):
         # Draw cards back to full
@@ -164,56 +167,70 @@ class Game_engine:
                 self.gb.add_card_to_lane(card)
 
     def player_placement_phase(self):
-        self.display_game()
-        card_options = ["1", "2", "3", "4"]
-        card_priority_counter = 1
-        cards_to_add = []
-        option = ""
+        if len(self.current_player.deck.card_list) != 0:
+            self.display_game()
+            card_options = ["1", "2", "3", "4"]
+            card_priority_counter = 1
+            cards_to_add = []
+            option = ""
 
-        # option = input("Enter card or (e)nd turn:")
-        option = input("Enter card or ENTER to end turn:")
-
-        # Get current player card placements 
-        while option != "":
-            # if self.current_player.is_card_in_hand(option):
-            if option in card_options:
-                card = self.current_player.get_card_by_number(option)
-                print(f"Selected Card: {card}")
-                if self.current_player.has_enough_mana(card):
-                    lane_option = input(f"Enter lane ({self.current_player.get_lane_list_string()}):")
-                    if self.current_player.is_lane_valid(lane_option):
-                        lane = self.current_player.get_lane_by_number(lane_option)
-                        if self.current_player.is_lane_occupied(lane) == False:
-                            # Update card priority
-                            card.add_priority(self.round, card_priority_counter)
-                            card_priority_counter += 1 
-
-                            # Remove card from player hand 
-                            self.current_player.remove_card_from_hand(card)
-
-                            # Add lane number to card 
-                            card.add_lane_number(lane.number)
-
-                            # Remove player mana based on card mana cost 
-                            self.current_player.remove_mana(card.mana)
-
-                            # Add card to list to add to gameboard
-                            cards_to_add.append(card)
-
-                            # Redisplay board with updated player info
-                            self.display_game()
-                        else:
-                            print("Lane occupied!")
-                    else:
-                        print("Invalid Lane!")
-                else:
-                    print("Not enough mana!")
-            else:
-                # print("You don't have this card!")
-                print("Invalid card number!")
-            
             # option = input("Enter card or (e)nd turn:")
             option = input("Enter card or ENTER to end turn:")
+
+            # Get current player card placements 
+            while option != "":
+                # if self.current_player.is_card_in_hand(option):
+                if option in card_options:
+                    card = self.current_player.get_card_by_number(option)
+                    print(f"Selected Card: {card}")
+                    if self.current_player.has_enough_mana(card):
+                        lane_option = input(f"Enter lane ({self.current_player.get_lane_list_string()}):")
+                        if self.current_player.is_lane_valid(lane_option):
+                            lane = self.current_player.get_lane_by_number(lane_option)
+                            if self.current_player.is_lane_occupied(lane) == False:
+                                # Update card priority
+                                card.add_priority(self.round, card_priority_counter)
+                                card_priority_counter += 1 
+
+                                # Remove card from player hand 
+                                self.current_player.remove_card_from_hand(card)
+
+                                # Add lane number to card 
+                                card.add_lane_number(lane.number)
+
+                                # Remove player mana based on card mana cost 
+                                self.current_player.remove_mana(card.mana)
+
+                                # Add card to list to add to gameboard
+                                cards_to_add.append(card)
+
+                                # Redisplay board with updated player info
+                                self.display_game()
+                            else:
+                                print("Lane occupied!")
+                        else:
+                            print("Invalid Lane!")
+                    else:
+                        print("Not enough mana!")
+                else:
+                    # print("You don't have this card!")
+                    print("Invalid card number!")
+                
+                # option = input("Enter card or (e)nd turn:")
+                option = input("Enter card or ENTER to end turn:")
+        else: 
+            # End the game if a player runs of cards 
+            print(f"{self.current_player} is out of cards! They lose!")
+            self.current_player.is_dead = True 
+            if self.player1.is_dead:
+                self.winner = self.player2
+                self.loser = self.player1
+                self.end_game()
+
+            elif self.player2.is_dead:
+                self.winner = self.player1
+                self.loser = self.player2
+                self.end_game()
 
         return cards_to_add
 
@@ -258,8 +275,8 @@ class Game_engine:
         self.player2.print_deck()
 
     def print_player_hands(self):
-        self.player1.print_hand()
-        self.player2.print_hand()
+        print(f"{self.player1}'s Hand: {self.player1.hand.card_list}")
+        print(f"{self.player2}'s Hand: {self.player2.hand.card_list}")
 
     def print_player_lanes(self):
         self.player1.print_lane_list()
