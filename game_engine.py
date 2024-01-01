@@ -248,7 +248,7 @@ class Game_engine:
 
         # Main combat loop 
         # Get each card in sorted active cards list 
-        for i, card in enumerate(self.gb.active_card_list[:]): # Maybe use copy ?
+        for i, card in enumerate(self.gb.active_card_list): # Maybe use copy ?
             # Run its combat actions
             self.gb.run_card_combat_actions(card, self.player1, self.player2)
             card.increase_counter()
