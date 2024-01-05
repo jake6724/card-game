@@ -248,20 +248,6 @@ class Game_engine:
         self.gb.reset_card_combat_logs()
         self.gb.reset_combat_log()
 
-        active_card_list_copy = self.gb.active_card_list[:]
-
-
-        """
-        How to iterate thru a copy of a list, but check that the enum counter val is not greater than the 
-        length of the orig list that we are editing ? 
-
-        Need to be able to check if there is another card after the current one, possibly without using len ?
-
-
-        Instead of actually removing cards during this phase, set them as dead and don't do their actions or 
-        perform actions on them if they are dead. 
-        """
-
         # Main combat loop 
         # Get each card in sorted active cards list 
         for i, card in enumerate(self.gb.active_card_list): # Maybe use copy ? ALSO INCLUDE DOWN IN THE SECOND ON ONE LINE 257
@@ -270,13 +256,13 @@ class Game_engine:
                 self.gb.run_card_combat_actions(card, self.player1, self.player2)
                 card.increase_counter()
             
-            # Check that current card is not the last card in list (index would go out of range)
-            if i != (len(self.gb.active_card_list) - 1):
-                # Update GB if next card **DOES NOT** have the same priority as current card 
-                if self.gb.active_card_list[(i + 1)].priority != card.priority:
+                # Check that current card is not the last card in list (index would go out of range)
+                if i != (len(self.gb.active_card_list) - 1):
+                    # Update GB if next card **DOES NOT** have the same priority as current card 
+                    if self.gb.active_card_list[(i + 1)].priority != card.priority:
+                        self.gb.update()
+                else: # Update if last card in the list (Also ensures board is always updated atleast once after a combat round)
                     self.gb.update()
-            else: # Update if last card in the list (Also ensures board is always updated atleast once after a combat round)
-                self.gb.update()
 
     def cleanup_phase(self):
         # Remove all dead cards from gameboard
