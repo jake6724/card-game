@@ -228,11 +228,16 @@ class GameBoard:
 
         for i, card in enumerate(self.active_card_list[:]): # MUST USE COPY OF LIST WHEN REMOVING ITEMS OR WILL SKIP ITEMS (what the [:] helps with)
             card.create_description()
-            if card.health <= 0:
-                self.remove_active_card(card)
+            if card.health <= 0 or card.counter > card.end_turn:
+                card.is_dead = True 
+
+        # for i, card in enumerate(self.active_card_list[:]): # MUST USE COPY OF LIST WHEN REMOVING ITEMS OR WILL SKIP ITEMS (what the [:] helps with)
+        #     card.create_description()
+        #     if card.health <= 0:
+        #         self.remove_active_card(card)
             
-            elif card.counter > card.end_turn: # Possible problem area 
-                self.remove_active_card(card)
+        #     elif card.counter > card.end_turn: # Possible problem area 
+        #         self.remove_active_card(card)
 
     def remove_active_card(self, card):
         # Reset card's lane to empty

@@ -41,6 +41,8 @@ class Game_engine:
 
             self.combat_phase()
 
+            self.cleanup_phase()
+
             if self.player1.is_dead:
                 self.winner = self.player2
                 self.loser = self.player1
@@ -246,12 +248,27 @@ class Game_engine:
         self.gb.reset_card_combat_logs()
         self.gb.reset_combat_log()
 
+        active_card_list_copy = self.gb.active_card_list[:]
+
+
+        """
+        How to iterate thru a copy of a list, but check that the enum counter val is not greater than the 
+        length of the orig list that we are editing ? 
+
+        Need to be able to check if there is another card after the current one, possibly without using len ?
+
+
+        Instead of actually removing cards during this phase, set them as dead and don't do their actions or 
+        perform actions on them if they are dead. 
+        """
+
         # Main combat loop 
         # Get each card in sorted active cards list 
-        for i, card in enumerate(self.gb.active_card_list): # Maybe use copy ?
-            # Run its combat actions
-            self.gb.run_card_combat_actions(card, self.player1, self.player2)
-            card.increase_counter()
+        for i, card in enumerate(self.gb.active_card_list): # Maybe use copy ? ALSO INCLUDE DOWN IN THE SECOND ON ONE LINE 257
+            # Run its combat actions if alive 
+            if card.is_dead == False:
+                self.gb.run_card_combat_actions(card, self.player1, self.player2)
+                card.increase_counter()
             
             # Check that current card is not the last card in list (index would go out of range)
             if i != (len(self.gb.active_card_list) - 1):
@@ -260,6 +277,14 @@ class Game_engine:
                     self.gb.update()
             else: # Update if last card in the list (Also ensures board is always updated atleast once after a combat round)
                 self.gb.update()
+
+    def cleanup_phase(self):
+        # Remove all dead cards from gameboard
+        print(f"Start of cleanup phase: {self.gb.active_card_list}")
+        for i, card in enumerate(self.gb.active_card_list[:]):
+            if card.is_dead == True:
+                self.gb.remove_active_card(card)
+        print(f"End of cleanup phase: {self.gb.active_card_list}")
 
     def end_game(self):
         print(f"{self.winner} is the winner! {self.loser} was killed by {self.loser.killed_by}")
