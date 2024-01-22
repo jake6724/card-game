@@ -223,7 +223,7 @@ class GameBoard:
         for i, card in enumerate(self.active_card_list):
             if card.counter > card.end_turn:
                 card.log_left_board = f"{card} left the board"
-
+        
         self.create_combat_log()
 
         for i, card in enumerate(self.active_card_list[:]): # MUST USE COPY OF LIST WHEN REMOVING ITEMS OR WILL SKIP ITEMS (what the [:] helps with)

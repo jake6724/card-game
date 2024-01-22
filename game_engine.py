@@ -135,7 +135,7 @@ class Game_engine:
             if card.name == "empty":
                 self.player1.hand.card_list.remove(card)
 
-        for card in self.player2.hand.card_list:
+        for i, card in enumerate(self.player2.hand.card_list[:]):
             if card.name == "empty":
                 self.player2.hand.card_list.remove(card)
 
