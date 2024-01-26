@@ -99,6 +99,8 @@ class GameBoard:
                 if int(card.lane_num) != 4:
                     finale_swap_target_lane = self.lane_list[(index + 1)]
 
+            print(f"Active card: {card} - Targets: {card_target}, {card_all_targets}, {player_target}")
+
 
         elif card.player == p2:
             card_target = self.get_lane_by_number(int(card.lane_num) - 4).active_card
@@ -120,6 +122,8 @@ class GameBoard:
             elif card.finale_swap_direction == "r":
                 if int(card.lane_num) != 8:
                     finale_swap_target_lane = self.lane_list[(index + 1)]
+            
+            print(f"Active card: {card} - Targets: {card_target}, {card_all_targets}, {player_target}")
 
         return [card_target, card_all_targets, player_target, repeat_swap_target_lane, finale_swap_target_lane]
 
@@ -148,7 +152,7 @@ class GameBoard:
             card_all_targets = target_results[1]
             player_target = target_results[2]
 
-        # Combat
+        # Card Combat
         if card_dmg_target == "c":
             if card_target.name != "empty": # Don't do opponent card attack if the card is empty 
                 card_target.take_damage(card_dmg, card)
@@ -160,6 +164,7 @@ class GameBoard:
 
                 card.log_card = f"{card} dealt {card_dmg} {m} dmg to {card_target.name}"
 
+        # All Combat 
         elif card_dmg_target == "a":
             for target in card_all_targets:
                 if target.name != "empty": # Don't do opponent card attack if the card is empty 
@@ -170,7 +175,8 @@ class GameBoard:
                         card.log_killed_cards = f"{card} killed {card.killed_cards_list}"
 
             card.log_card = f"{card} dealt {card_dmg} {m} dmg to all enemy cards"
-            
+        
+        # Attack Player 
         if player_dmg > 0:
             player_target.take_damage(player_dmg, card) 
             card.log_player = f"{card} dealt {player_dmg} {m} dmg to {player_target.name}"
