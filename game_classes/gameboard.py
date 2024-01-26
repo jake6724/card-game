@@ -80,7 +80,7 @@ class GameBoard:
         # Get targets based on card data 
         if card.player == p1:
             card_target = self.get_lane_by_number(int(card.lane_num) + 4).active_card
-            card_all_targets = [self.lane1.active_card, self.lane2.active_card, self.lane3.active_card, self.lane4.active_card]
+            card_all_targets = [self.lane5.active_card, self.lane6.active_card, self.lane7.active_card, self.lane8.active_card]
             player_target = p2
 
             if card.repeat_swap_direction == "l":
