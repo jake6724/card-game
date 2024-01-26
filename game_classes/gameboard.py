@@ -174,7 +174,7 @@ class GameBoard:
                         card.killed_cards_list.append(target)
                         card.log_killed_cards = f"{card} killed {card.killed_cards_list}"
 
-            card.log_card = f"{card} dealt {card_dmg} {m} dmg to all enemy cards"
+                    card.log_card = f"{card} dealt {card_dmg} {m} dmg to all enemy cards"
         
         # Attack Player 
         if player_dmg > 0:
