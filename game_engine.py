@@ -315,7 +315,7 @@ class Game_engine:
         print(f"Health: {self.current_player.health}")
 
     def display_game(self):
-        self.clear_terminal()
+        # self.clear_terminal()
         self.display_round_info()
         self.display_gameboard()
         self.display_current_player_hand()
