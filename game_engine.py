@@ -250,8 +250,9 @@ class Game_engine:
 
         # Main combat loop 
         # Get each card in sorted active cards list 
-        for i, card in enumerate(self.gb.active_card_list): # Maybe use copy ? ALSO INCLUDE DOWN IN THE SECOND ON ONE LINE 257
+        for i, card in enumerate(self.gb.active_card_list):
             # Run its combat actions if alive 
+            print(f"CC: {card} - is_dead={card.is_dead}")
             if card.is_dead == False:
                 self.gb.run_card_combat_actions(card, self.player1, self.player2)
                 card.increase_counter()
@@ -263,6 +264,7 @@ class Game_engine:
                         self.gb.update()
                 else: # Update if last card in the list (Also ensures board is always updated atleast once after a combat round)
                     self.gb.update()
+        self.gb.update()
 
     def cleanup_phase(self):
         # Remove all dead cards from gameboard

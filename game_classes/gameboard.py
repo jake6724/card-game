@@ -54,14 +54,10 @@ class GameBoard:
         repeat_swap_target_lane = target_results[3]
         finale_swap_target_lane = target_results[4]
 
-        # # Run card combat 
-        # if card.counter == card.end_turn:
-        #     self.run_finale_combat(card, finale_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
+        if card.counter > card.end_turn:
+            print(f"{card} should be dead?")
 
-        # elif card.counter >= card.start_turn: 
-        #     self.run_repeat_combat(card, repeat_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
-
-          # Run card combat 
+        # Run card combat 
         if card.counter == card.end_turn:
             self.run_combat("f", card, finale_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
 
@@ -99,7 +95,7 @@ class GameBoard:
                 if int(card.lane_num) != 4:
                     finale_swap_target_lane = self.lane_list[(index + 1)]
 
-            print(f"Active card: {card} - Targets: {card_target}, {card_all_targets}, {player_target}")
+            # print(f"Active card: {card} - Targets: {card_target}, {card_all_targets}, {player_target}")
 
 
         elif card.player == p2:
@@ -123,7 +119,7 @@ class GameBoard:
                 if int(card.lane_num) != 8:
                     finale_swap_target_lane = self.lane_list[(index + 1)]
             
-            print(f"Active card: {card} - Targets: {card_target}, {card_all_targets}, {player_target}")
+            # print(f"Active card: {card} - Targets: {card_target}, {card_all_targets}, {player_target}")
 
         return [card_target, card_all_targets, player_target, repeat_swap_target_lane, finale_swap_target_lane]
 
@@ -232,7 +228,9 @@ class GameBoard:
         
         self.create_combat_log()
 
-        for i, card in enumerate(self.active_card_list[:]): # MUST USE COPY OF LIST WHEN REMOVING ITEMS OR WILL SKIP ITEMS (what the [:] helps with)
+        for i, card in enumerate(self.active_card_list): 
+            print(f"Update CC: {card} - Health:{card.health} - Counter: {card.counter}")
+
             card.create_description()
             if card.health <= 0 or card.counter > card.end_turn:
                 card.is_dead = True 
