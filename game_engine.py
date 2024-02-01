@@ -251,33 +251,27 @@ class Game_engine:
         # Main combat loop 
         # Get each card in sorted active cards list 
         for i, card in enumerate(self.gb.active_card_list):
-            print(f"Active card list: {self.gb.active_card_list}")
             # Run its combat actions if alive 
-            print(f"Checking if {card} is dead: {card.is_dead}")
             if card.is_dead == False:
-                print(f"Running {card} combat. Increasing Counter")
                 self.gb.run_card_combat_actions(card, self.player1, self.player2)
                 card.increase_counter()
             
                 # Check that current card is not the last card in list (index would go out of range)
                 if i != (len(self.gb.active_card_list) - 1):
-                    print("NOT the last card in active card list")
                     # Update GB if next card **DOES NOT** have the same priority as current card 
                     if self.gb.active_card_list[(i + 1)].priority != card.priority:
-                        print("Next card DOES NOT have the same priority as {card}")
                         self.gb.update()
                 # else: # Update if last card in the list (Also ensures board is always updated atleast once after a combat round)
                 #     self.gb.update()
-        print("All active cards run. Updating")
         self.gb.update()
 
     def cleanup_phase(self):
         # Remove all dead cards from gameboard
-        print(f"Start of cleanup phase: {self.gb.active_card_list}")
+        # print(f"Start of cleanup phase: {self.gb.active_card_list}")
         for i, card in enumerate(self.gb.active_card_list[:]):
             if card.is_dead == True:
                 self.gb.remove_active_card(card)
-        print(f"End of cleanup phase: {self.gb.active_card_list}")
+        # print(f"End of cleanup phase: {self.gb.active_card_list}")
 
     def end_game(self):
         print(f"{self.winner} is the winner! {self.loser} was killed by {self.loser.killed_by}")

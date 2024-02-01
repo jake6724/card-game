@@ -217,7 +217,6 @@ class GameBoard:
             self.combat_data.append(["", "", "", "", ""])
 
     def update(self):
-        print("Update called")
         # Check if the card will leave the board, so combat log can be updated
         # This needs to be done before log is created and card is actually remvoed 
         for i, card in enumerate(self.active_card_list):
@@ -231,14 +230,6 @@ class GameBoard:
             if card.health <= 0 or card.counter > card.end_turn:
                 print(f"Card expired - {card}")
                 card.is_dead = True 
-
-        # for i, card in enumerate(self.active_card_list[:]): # MUST USE COPY OF LIST WHEN REMOVING ITEMS OR WILL SKIP ITEMS (what the [:] helps with)
-        #     card.create_description()
-        #     if card.health <= 0:
-        #         self.remove_active_card(card)
-            
-        #     elif card.counter > card.end_turn: # Possible problem area 
-        #         self.remove_active_card(card)
 
     def remove_active_card(self, card):
         # Reset card's lane to empty
