@@ -102,8 +102,6 @@ class Card:
     def take_damage(self, damage_amount, attacker):
         self.health =  self.health - damage_amount
         # print(f"{self}: I took {damage_amount} dmg from {attacker.name}")
-        if self.health <= 0:
-            self.is_dead = True 
 
     def increase_counter(self):
         self.counter = self.counter + 1 

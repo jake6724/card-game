@@ -54,9 +54,6 @@ class GameBoard:
         repeat_swap_target_lane = target_results[3]
         finale_swap_target_lane = target_results[4]
 
-        if card.counter > card.end_turn:
-            print(f"{card} should be dead?")
-
         # Run card combat 
         if card.counter == card.end_turn:
             self.run_combat("f", card, finale_swap_target_lane, card_target, card_all_targets, player_target, p1, p2)
@@ -154,7 +151,7 @@ class GameBoard:
                 card_target.take_damage(card_dmg, card)
 
                 # Check if this damage killed the card, if so add to combat log 
-                if card_target.is_dead:
+                if card_target.health <= 0:
                     card.killed_cards_list.append(card_target)
                     card.log_killed_cards = f"{card} killed {card.killed_cards_list}"
 
@@ -166,7 +163,7 @@ class GameBoard:
                 if target.name != "empty": # Don't do opponent card attack if the card is empty 
                     target.take_damage(card_dmg, card)
                     # Check if this damage killed the card, if so add to combat log 
-                    if target.is_dead:
+                    if target.health <= 0:
                         card.killed_cards_list.append(target)
                         card.log_killed_cards = f"{card} killed {card.killed_cards_list}"
 
@@ -220,6 +217,7 @@ class GameBoard:
             self.combat_data.append(["", "", "", "", ""])
 
     def update(self):
+        print("Update called")
         # Check if the card will leave the board, so combat log can be updated
         # This needs to be done before log is created and card is actually remvoed 
         for i, card in enumerate(self.active_card_list):
@@ -229,10 +227,9 @@ class GameBoard:
         self.create_combat_log()
 
         for i, card in enumerate(self.active_card_list): 
-            print(f"Update CC: {card} - Health:{card.health} - Counter: {card.counter}")
-
             card.create_description()
             if card.health <= 0 or card.counter > card.end_turn:
+                print(f"Card expired - {card}")
                 card.is_dead = True 
 
         # for i, card in enumerate(self.active_card_list[:]): # MUST USE COPY OF LIST WHEN REMOVING ITEMS OR WILL SKIP ITEMS (what the [:] helps with)
